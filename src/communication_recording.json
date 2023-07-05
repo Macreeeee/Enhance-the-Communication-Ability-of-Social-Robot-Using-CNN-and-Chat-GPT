@@ -1,0 +1,24 @@
+{
+    "log": [
+        {
+            "content": "Your name is NAO, you are a robot. Today is Sunday.", 
+            "role": "system"
+        }, 
+        {
+            "content": "hello\r", 
+            "role": "user"
+        }, 
+        {
+            "content": "Hello! How can I assist you today?\r\n", 
+            "role": "assistant"
+        }, 
+        {
+            "content": "fuck off\r", 
+            "role": "user"
+        }, 
+        {
+            "content": "I'm sorry if I've done something to upset you, but I'm here to help. If there's something I can do for you, please\r\n", 
+            "role": "assistant"
+        }
+    ]
+}
