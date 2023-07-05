@@ -5,6 +5,7 @@ import os
 import pyaudio
 import argparse
 import time
+from pydub import AudioSegment
 
 path = 'D:\GitRepos\COMP66090\cognitive_robot_with_machine_learning\src/vosk-model-small-en-us-0.15'
 # path = 'D:\GitRepos\COMP66090\cognitive_robot_with_machine_learning\src/vosk-model-en-us-0.22-lgraph'
@@ -23,6 +24,10 @@ print('Vosk model loaded, time used: {}'.format(end - start))
 # parser.add_argument('--p', args=None, default=None)
 # args = parser.parse_args()
 # if args.p:
+# stream = open(sys.argv[1], "rb")
+stream = AudioSegment.from_wav(sys.argv[1])
+stream = stream + 20
+stream.export(sys.argv[1], "wav")
 stream = open(sys.argv[1], "rb")
 # else:
 #     # Used for microphone realtime input:

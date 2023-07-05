@@ -13,12 +13,8 @@
             "role": "assistant"
         }, 
         {
-            "content": "fuck off\r", 
+            "content": "\r", 
             "role": "user"
-        }, 
-        {
-            "content": "I'm sorry if I've done something to upset you, but I'm here to help. If there's something I can do for you, please\r\n", 
-            "role": "assistant"
         }
     ]
 }

@@ -2,18 +2,17 @@ from naoqi import ALProxy
 import subprocess
 import json
 import time
+import datetime
+import keyboard
 
-
+# Call chat gpt through recorded json file.
 def call_gpt():
     command = "python D:\GitRepos\COMP66090\cognitive_robot_with_machine_learning\src\chat_test.py"
-    # command += content
-
-    # Run the command in the terminal
     output = subprocess.check_output(command, shell=True)
     print(output)
     return output
 
-
+# Send audio recording .wav to Vosk model.
 def speech_recognition(path):
     command = "python D:\GitRepos\COMP66090\cognitive_robot_with_machine_learning\src/vosk_test.py " + path
     output = subprocess.check_output(command, shell=True)
@@ -23,6 +22,7 @@ def speech_recognition(path):
     print('you said: ' + output[1])
     return output[1]
 
+# Transfer recording.wav from NAO to src.
 def file_transfer():
     command = 'pscp -pw nao nao@nao.local:/home/nao/recordings/recording.wav D:\GitRepos\COMP66090\cognitive_robot_with_machine_learning\src/recordings/recording.wav'
     op = subprocess.check_output(command)
@@ -31,40 +31,36 @@ def file_transfer():
     # op = subprocess.check_output(command)
     # print 'delete original audio file in nao'
 
-# TODO: save communication recording
+# Initially create or re-write communication recording.json with basic chat-GPT content.
+# Initially create or re-write communication recording.txt with time.
 def initial_communication_background():
     content = "Your name is NAO, you are a robot. Today is Sunday."
-
     communication = [{"role": "system", "content": content}]
 
     json_dict = dict()
     json_dict['log'] = communication
-
-    # Serializing json
     json_object = json.dumps(json_dict, indent=4)
-
-    # Writing to sample.json
+    # Initialize json file
     with open("./communication_recording.json", "w+") as outfile:
         outfile.write(json_object)
+    # Initialize txt file
+    with open("./communication_recording.txt", "a") as outfile:
+        outfile.write('===================================\n')
+        outfile.write('Recording Date: {}\n'.format(datetime.datetime.now()))
 
+# Add new communication dialog to communication recording json.
 def add_new_content(role, content):
-
     log = json.load(open("./communication_recording.json", "r"))
     log['log'].append({"role": role, "content": content})
     json_object = json.dumps(log, indent=4)
 
-    # Writing to sample.json
     with open("./communication_recording.json", "w+") as outfile:
         outfile.write(json_object)
-    # print log
-    # return log
-    # with open('./communication_recording.json', 'w+') as openfile:
-    #     # Reading from json file
-    #     communication = dict(openfile.readline())
-    #     print(openfile.readline())
-    #     communication['log'].append({"role": role, "content": content})
-    #     json_object = json.dumps(communication)
-    #     openfile.write(str(communication))
+    with open("./communication_recording.txt", "a") as outfile:
+        outfile.write('{}  {}: {}'.format(datetime.datetime.now(), role, content))
+
+def on_word_recognized(value):
+    print("Recognized word:", value)
 
 
 if __name__ == "__main__":
@@ -75,23 +71,28 @@ if __name__ == "__main__":
     # motion = ALProxy("ALMotion", IP, PORT)
     tts = ALProxy("ALTextToSpeech", IP, PORT)
     audioRecorderProxy = ALProxy("ALAudioRecorder", IP, PORT)
-    asr = ALProxy("ALSpeechRecognition", IP, PORT)
-    # motion.moveInit()
-    # motion.moveTo(0.5, 0, 0) # (x; y; theta)
+    # asr = ALProxy("ALSpeechRecognition", IP, PORT)
+    # asr.setVocabulary(['over'], False)
+    # asr.subscribe("WordRecognized")
+    # asr.signal.connect(on_word_recognized)
+    moodProxy = ALProxy("ALMood", IP, PORT)
+    print moodProxy.currentPersonState()
+    print moodProxy.getEmotionalReaction()
 
-    # arp = ALProxy("ALAudioRecorderProxy", IP, PORT)
-    # channels = ALValue
-    for i in range(2):
-        conversion_dict = {'time':time.time()}
-        # videoRecorderProxy.setFrameRate(10.0)
-        # videoRecorderProxy.setResolution(2)  # Set resolution to VGA (640 x 480)
-        # We'll save a 5 second video record in /home/nao/recordings/cameras/
+    exit()
+    while True:
         audioRecorderProxy.startMicrophonesRecording("/home/nao/recordings/recording.wav",  'wav', 16000, (0,0,1,0))
         print "Audio record started."
-
-        time.sleep(5)
+        while True:
+            if keyboard.is_pressed("p"):
+                print 'keyboard interrupt'
+                break
+            if keyboard.is_pressed("q"):
+                print 'end conversation'
+                audioRecorderProxy.stopMicrophonesRecording()
+                exit()
         audioRecorderProxy.stopMicrophonesRecording()
-        print 'record over'
+        print 'recording over'
 
         file_transfer()
         txt = speech_recognition('D:\GitRepos\COMP66090\cognitive_robot_with_machine_learning\src/recordings/recording.wav')
@@ -100,6 +101,6 @@ if __name__ == "__main__":
         response = call_gpt()
         add_new_content('assistant', response)
 
-        tts.say(response)
+        # tts.say(response)
 
 
