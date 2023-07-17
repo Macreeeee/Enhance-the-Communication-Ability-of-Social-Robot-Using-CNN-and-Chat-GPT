@@ -10,9 +10,9 @@ openai.api_key = "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"
 # message = {"role": "user", "content": content}
 # messages.append(message)
 
-with open('./communication_recording.json', 'r') as openfile:
+with open('./recordings/communication_recording.json', 'r') as openfile:
     # Reading from json file
-    log = json.load(open("./communication_recording.json", "r"))['log']
+    log = json.load(open("./recordings/communication_recording.json", "r"))['log']
     # print(log)
     # communication = json.load(openfile)['log']
 
