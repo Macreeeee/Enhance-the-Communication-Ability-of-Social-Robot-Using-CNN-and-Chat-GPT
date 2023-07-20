@@ -6,17 +6,21 @@ import datetime
 import keyboard
 import os
 import socket
-
+from Tkinter import *
 from gui import *
 
 nao = False
-
-def bind_socket():
-    global s, conn, addr
-    s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-    s.bind(('localhost', 5000))
-    s.listen(1)
-    conn, addr = s.accept()
+path_to_nao_audio = 'nao@nao.local:/home/nao/recordings/recording.wav'
+path_to_pc_audio = 'D:\GitRepos\COMP66090\cognitive_robot_with_machine_learning\src/recordings/recording.wav'
+path_to_nao_picture = 'nao@nao.local:/home/nao/recordings/cameras'
+path_to_pc_picture = 'D:\GitRepos\COMP66090\cognitive_robot_with_machine_learning\src/recordings/pictures'
+#
+# def bind_socket():
+#     global s, conn, addr
+#     s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+#     s.bind(('localhost', 5000))
+#     s.listen(1)
+#     conn, addr = s.accept()
 
 # Call chat gpt through recorded json file.
 def call_gpt():
@@ -38,15 +42,15 @@ def file_transfer(path1, path2):
     subprocess.call(command, stdout=open(os.devnull, 'wb'))
     # command = "plink -l nao -pw nao nao@nao.local 'rm /home/nao/recordings/recording.wav'"
 
-def load_fer_model():
-    global conn
-    response = "load_fer_model"
-    conn.sendall(response.encode())
-
-def fer_predict():
-    global conn
-    response = "run_fer_model"
-    conn.sendall(response.encode())
+# def load_fer_model():
+#     global conn
+#     response = "load_fer_model"
+#     conn.sendall(response.encode())
+#
+# def fer_predict():
+#     global conn
+#     response = "run_fer_model"
+#     conn.sendall(response.encode())
 
 
 
@@ -96,8 +100,13 @@ def take_picture_dataset():
     exit()
 
 if __name__ == "__main__":
-    subprocess.call("python27 python27/gui.py")
-    print('Program finished. Exit')
+    root = Tk()
+    root.title("Communication Manager")
+    app = Application(master=root)
+    app.mainloop()
+    root.destroy()
+
+    print('GUI finished. Exit')
     exit()
 
 
@@ -140,8 +149,8 @@ if __name__ == "__main__":
                     last_time = current_time
                     nao_picture_path_list = photoCaptureProxy.takePictures(1, "/home/nao/recordings/cameras/", "image")
                     file_transfer(path_to_nao_picture + '/image.jpg', path_to_pc_picture + '/tmp_image.jpg')
-                    predict  = fer_predict()
-                    print(predict)
+                    # predict  = fer_predict()
+                    # print(predict)
                     # print 'picture took {}'.format(current_time)
                 if keyboard.is_pressed("p"):
                     print 'keyboard interrupt'

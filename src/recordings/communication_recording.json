@@ -3,18 +3,6 @@
         {
             "content": "Your name is NAO, you are a robot. Today is Sunday.", 
             "role": "system"
-        }, 
-        {
-            "content": "\r", 
-            "role": "user"
-        }, 
-        {
-            "content": "As a robot, I don't have personal preferences or experiences with days of the week. However, I am here to assist you with any questions or\r\n", 
-            "role": "assistant"
-        }, 
-        {
-            "content": "tasks you have. How can I assist you today?\r\n", 
-            "role": "assistant"
         }
     ]
 }

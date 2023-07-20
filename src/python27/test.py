@@ -1,22 +1,27 @@
 import socket
+from test2 import *
 
-def main():
-    # Create a socket
+
+class Var:
+    def __init__(self, var):
+        self.var = var
+
+
+def t1():
     s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-
-    # Connect to the subprocess
     s.connect(('localhost', 5000))
-
-    # Send data to the subprocess
     data = "Hello from Python 2.7!"
     s.sendall(data.encode())
-
-    # Receive data from the subprocess
     response = s.recv(1024)
     print(response.decode())
-
-    # Close the socket
     s.close()
 
+
+def define_and_print_var():
+    instance = Var(var=1)
+
+    print_var()
+
+
 if __name__ == '__main__':
-    main()
+    define_and_print_var()

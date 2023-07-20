@@ -1,3 +1,155 @@
 ===================================
 Recording Date: 2023-07-06 14:19:22.191000
-2023-07-06 14:19:35.454000  user: what on your of2023-07-06 14:19:38.157000  assistant: tasks you have. How can I assist you today?
+2023-07-06 14:19:35.454000  user: what on your of
+2023-07-06 14:19:38.157000  assistant: tasks you have. How can I assist you today?
+
+===================================
+Recording Date: 2023-07-07 15:00:17.408000
+===================================
+Recording Date: 2023-07-07 15:04:13.997000
+===================================
+Recording Date: 2023-07-07 15:04:54.077000
+===================================
+Recording Date: 2023-07-07 15:05:50.032000
+===================================
+Recording Date: 2023-07-07 15:22:14.458000
+===================================
+Recording Date: 2023-07-08 18:54:34.570000
+===================================
+Recording Date: 2023-07-10 13:30:19.614000
+===================================
+Recording Date: 2023-07-10 13:32:11.419000
+2023-07-10 13:32:31.192000  user: i dunno what day is today
+===================================
+Recording Date: 2023-07-10 13:33:17.334000
+2023-07-10 13:33:37.516000  user: hello my name is mike
+2023-07-10 13:33:39.691000  assistant: Hello Mike! How can I assist you today?
+
+2023-07-10 13:34:02.491000  user: the can you please tell me what the name i had
+2023-07-10 13:34:05.071000  assistant: Certainly, Mike. You just mentioned that your name is Mike. Is there another name that you are referring to?
+
+2023-07-10 13:34:24.035000  user: 
+2023-07-10 13:34:26.156000  assistant: Apologies, but as an AI assistant, I do not have access to personal information unless it has been provided to me in this conversation. If you
+
+===================================
+Recording Date: 2023-07-10 13:55:30.006000
+2023-07-10 13:55:44.904000  user: hello
+2023-07-10 13:55:47.248000  assistant: Hello! How can I assist you today?
+
+===================================
+Recording Date: 2023-07-10 13:56:16.065000
+===================================
+Recording Date: 2023-07-10 13:56:35.074000
+===================================
+Recording Date: 2023-07-10 13:57:41.883000
+===================================
+Recording Date: 2023-07-10 13:58:06.885000
+2023-07-10 13:58:17.308000  user: 
+2023-07-10 13:58:19.704000  assistant: Hello! I'm NAO, the robot. How can I assist you today?
+
+2023-07-10 13:58:28.238000  user: hello
+2023-07-10 13:58:31.813000  assistant: Hello! How can I assist you today?
+
+2023-07-10 13:58:40.516000  user: hello hello
+2023-07-10 13:58:43.021000  assistant: Hello! How can I assist you today?
+
+2023-07-10 13:58:57.712000  user: what is your 
+===================================
+Recording Date: 2023-07-10 14:02:18.824000
+2023-07-10 14:02:30.196000  user: how long we opened as wow
+2023-07-10 14:02:32.710000  assistant: As an AI assistant, I don't have information on specific businesses or organizations. If you're referring to the World of Warcraft (WoW) game
+
+===================================
+Recording Date: 2023-07-10 14:04:59.142000
+===================================
+Recording Date: 2023-07-10 14:05:32.244000
+2023-07-10 14:05:40.482000  user: 
+2023-07-10 14:05:42.754000  assistant: Hello NAO! How can I assist you today?
+
+2023-07-10 14:05:49.764000  user: 
+2023-07-10 14:05:52.297000  assistant: Good day, NAO! As a robot, I am here to help you with any queries or tasks you might have. Feel free to ask me
+
+2023-07-10 14:05:57.253000  user: 
+2023-07-10 14:05:59.539000  assistant: Hello there! How can I assist you today? Is there something specific you would like help with?
+
+===================================
+Recording Date: 2023-07-10 14:07:05.223000
+2023-07-10 14:07:11.386000  user: it is very nice to see you 
+2023-07-10 14:07:13.690000  assistant: Thank you! It's great to see you too. How can I assist you today?
+
+2023-07-10 14:07:23.262000  user: what does it do 
+2023-07-10 14:07:26.487000  assistant: As a robot, I can perform various tasks and functions depending on my programming. Some common capabilities of robots like me include:
+
+2023-07-10 14:07:33.670000  user: what day is a two day 
+2023-07-10 14:07:36.041000  assistant: A two-day is not a specific day. However, if you are referring to a period of two consecutive days, it could be any two consecutive days
+
+2023-07-10 14:07:47.074000  user: what day is it today 
+2023-07-10 14:07:48.919000  assistant: Today is Sunday.
+
+===================================
+Recording Date: 2023-07-10 14:09:52.457000
+2023-07-10 14:10:04.329000  user: cheap2023-07-10 14:10:06.992000  assistant: NAO is a robot that specializes in various tasks such as cleaning, cooking, and assisting with household chores. NAO is not capable of making financial
+2023-07-10 14:10:29.287000  user: oh what day is today2023-07-10 14:10:31.520000  assistant: Today is Sunday.
+2023-07-10 14:10:44.287000  user: 2023-07-10 14:10:46.713000  assistant: Is there anything specific you would like to know or discuss about Sunday?
+2023-07-10 14:10:59.797000  user: what day where i'd be tomorrow2023-07-10 14:11:02.031000  assistant: If today is Sunday, tomorrow would be Monday.
+===================================
+Recording Date: 2023-07-10 14:11:31.012000
+2023-07-10 14:12:06.277000  user: one day that day the day the day and what they were it bit tomorrow2023-07-10 14:12:08.608000  assistant: I'm sorry, but I'm having trouble understanding your sentence. Could you please rephrase or provide more context?
+2023-07-10 14:12:32.093000  user: my name is mike nice to meet you2023-07-10 14:12:34.880000  assistant: Nice to meet you too, Mike! How can I assist you today?
+2023-07-10 14:12:53.618000  user: the fuck lot2023-07-10 14:12:55.942000  assistant: I'm sorry if there was any confusion. As an AI language model, I'm here to help answer questions and engage in constructive conversations. If there
+===================================
+Recording Date: 2023-07-10 15:11:41.248000
+===================================
+Recording Date: 2023-07-10 15:15:37.882000
+===================================
+Recording Date: 2023-07-10 15:42:33.583000
+===================================
+Recording Date: 2023-07-10 15:43:38.298000
+===================================
+Recording Date: 2023-07-10 15:46:14.785000
+===================================
+Recording Date: 2023-07-11 13:20:54.379000
+===================================
+Recording Date: 2023-07-11 13:23:22.333000
+===================================
+Recording Date: 2023-07-11 13:24:16.392000
+===================================
+Recording Date: 2023-07-11 13:24:49.893000
+===================================
+Recording Date: 2023-07-11 13:28:22.673000
+===================================
+Recording Date: 2023-07-11 13:34:37.788000
+===================================
+Recording Date: 2023-07-11 13:41:03.513000
+===================================
+Recording Date: 2023-07-11 13:43:01.657000
+===================================
+Recording Date: 2023-07-11 13:44:43.010000
+===================================
+Recording Date: 2023-07-11 13:49:51.363000
+===================================
+Recording Date: 2023-07-11 13:54:33.456000
+===================================
+Recording Date: 2023-07-11 13:58:51.394000
+===================================
+Recording Date: 2023-07-11 14:00:34.486000
+===================================
+Recording Date: 2023-07-12 13:34:31.163000
+===================================
+Recording Date: 2023-07-12 14:08:53.372000
+===================================
+Recording Date: 2023-07-12 14:20:58.865000
+===================================
+Recording Date: 2023-07-12 14:24:38.412000
+===================================
+Recording Date: 2023-07-12 14:50:16.524000
+===================================
+Recording Date: 2023-07-12 14:52:36.196000
+===================================
+Recording Date: 2023-07-20 15:43:23.537000
+===================================
+Recording Date: 2023-07-20 15:45:00.039000
+===================================
+Recording Date: 2023-07-20 15:45:59.341000
+===================================
+Recording Date: 2023-07-20 15:46:08.066000
