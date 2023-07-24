@@ -135,8 +135,8 @@ if __name__ == "__main__":
             img = cv2.imread('./recordings/pictures/tmp_image.jpg')
             predict = self_trained_cnn(face_cascade, model, img)
             # print(predict)
-            data = "predict: {}".format(predict)
-            s.sendall(data.encode())
+            # data = "predict: {}".format(predict)
+            s.sendall(predict.encode())
 
     # face_cascade = cv2.CascadeClassifier(cv2.data.haarcascades + 'haarcascade_frontalface_default.xml')
     # model_path = 'D:\GitRepos\COMP66090\cognitive_robot_with_machine_learning\src/fer_model/flicnn_model.keras'

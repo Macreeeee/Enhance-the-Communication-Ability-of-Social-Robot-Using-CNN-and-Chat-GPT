@@ -153,3 +153,90 @@ Recording Date: 2023-07-20 15:45:00.039000
 Recording Date: 2023-07-20 15:45:59.341000
 ===================================
 Recording Date: 2023-07-20 15:46:08.066000
+===================================
+Recording Date: 2023-07-24 13:57:39.224000
+===================================
+Recording Date: 2023-07-24 13:59:46.934000
+2023-07-24 13:59:53.141000  user: hello what day that day 2023-07-24 13:59:56.327000  assistant: Today is Sunday.
+===================================
+Recording Date: 2023-07-24 14:00:16.104000
+===================================
+Recording Date: 2023-07-24 14:03:23.264000
+2023-07-24 14:03:34.556000  user: hello how are you today could you please tell me what days is today 2023-07-24 14:03:37.288000  assistant: Hello! I'm an AI assistant named NAO. Today is Sunday. How can I assist you today?
+===================================
+Recording Date: 2023-07-24 14:03:59.247000
+2023-07-24 14:04:04.931000  user: hello hi you 2023-07-24 14:04:07.741000  assistant: Hello! I am NAO, a robot. How can I assist you today?
+===================================
+Recording Date: 2023-07-24 14:04:27.814000
+2023-07-24 14:04:33.511000  user: hello how are you 2023-07-24 14:04:36.531000  assistant: Hello! As a robot, I don't have emotions, but I'm functioning properly. How can I assist you today?
+===================================
+Recording Date: 2023-07-24 14:16:43.684000
+2023-07-24 14:16:51.453000  user: hello what the is is today 2023-07-24 14:16:54.353000  assistant: Hello! Today is Sunday. How can I assist you?
+2023-07-24 14:17:01.587000  user: i mean what daisies today 2023-07-24 14:17:04.948000  assistant: I apologize for any confusion. Today's date is not specific to daisies or any particular flower. Is there something specific you would like to know
+2023-07-24 14:17:19.343000  user: oh sorry let me clarify what i said what i said is what day is it today 2023-07-24 14:17:22.529000  assistant: No problem! As I mentioned earlier, today is Sunday. Is there anything else you would like to know or discuss?
+2023-07-24 14:17:39.563000  user: okay thanks for your help see you for ===================================
+Recording Date: 2023-07-24 14:19:56.635000
+
+2023-07-24 14:20:00.760000  user: hello 
+2023-07-24 14:20:03.312000  assistant: Hello! How can I assist you today?
+
+2023-07-24 14:20:11.040000  user: thanks for your help see you 
+2023-07-24 14:20:14.280000  assistant: You're welcome! If you have any more questions in the future, feel free to ask. Have a great day! Goodbye!
+
+2023-07-24 14:20:29.165000  user: hi mean care response me ways just a single ward and 
+2023-07-24 14:20:32.064000  assistant: Hello! Of course, I'll do my best to respond to you in a concise manner. How can I assist you?
+
+2023-07-24 14:20:49.076000  user: okay just to response me ways a single word and it 
+2023-07-24 14:20:51.672000  assistant: Understood! I'll respond to you with single-word answers. What do you need help with?
+===================================
+Recording Date: 2023-07-24 14:29:13.170000
+
+2023-07-24 14:29:17  user: hello 
+2023-07-24 14:29:20  assistant: Hello! How can I assist you today?
+
+2023-07-24 14:29:29  user: ha thanks for your health see you 
+2023-07-24 14:29:32  assistant: You're welcome! Take care and have a great day! Goodbye!
+
+2023-07-24 14:29:45  user: her response me with a word finish 
+2023-07-24 14:29:48  assistant: Sure, here's your response with the word 'finish':
+
+You're welcome! Take care and have a great day! Goodbye! Finish.
+===================================
+Recording Date: 2023-07-24 14:33:40.274000
+
+2023-07-24 14:33:45  user: goodbye 
+2023-07-24 14:33:47  assistant: Goodbye! Have a great day!
+===================================
+Recording Date: 2023-07-24 14:36:00.368000
+===================================
+Recording Date: 2023-07-24 14:36:00.377000
+
+2023-07-24 14:36:11  user: oh good why 
+2023-07-24 14:36:15  assistant: Good day, human. As a robot, I do not experience emotions like humans do, but I am programmed to understand the concept of a day of
+
+2023-07-24 14:36:22  user: goodbye 
+2023-07-24 14:36:25  assistant: Goodbye! If you have any more questions or need assistance in the future, feel free to ask. Have a great day!
+===================================
+Recording Date: 2023-07-24 14:38:36.157000
+===================================
+Recording Date: 2023-07-24 14:40:54
+
+2023-07-24 14:41:06  user: hello what day is if today or 
+2023-07-24 14:41:08  assistant: Today is Sunday.
+
+2023-07-24 14:41:16  user: so what day way i'd to be tomorrow 
+2023-07-24 14:41:19  assistant: If today is Sunday, then tomorrow will be Monday.
+
+2023-07-24 14:41:30  user: alright thanks for your false see you 
+2023-07-24 14:41:33  assistant: I apologize if there was any confusion. If you have any more questions in the future, feel free to ask. Have a great day!
+
+2023-07-24 14:41:43  user: he should say good bye anyway goodbye 
+2023-07-24 14:41:46  assistant: Goodbye! If you have any more questions in the future, don't hesitate to ask. Take care!
+===================================
+Recording Date: 2023-07-24 14:41:53
+
+2023-07-24 14:41:58  user: anyway gonna buy 
+2023-07-24 14:42:01  assistant: Good morning! How can I assist you today? What are you planning to buy?
+
+2023-07-24 14:42:09  user: nothing goodbye 
+2023-07-24 14:42:13  assistant: Alright, if you have any other questions or need assistance in the future, feel free to ask. Have a great day! Goodbye!

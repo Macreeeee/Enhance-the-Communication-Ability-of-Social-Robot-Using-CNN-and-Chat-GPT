@@ -69,7 +69,7 @@ def initial_communication_background():
     # Initialize txt file
     with open("./recordings/communication_recording.txt", "a") as outfile:
         outfile.write('===================================\n')
-        outfile.write('Recording Date: {}\n'.format(datetime.datetime.now()))
+        outfile.write('Recording Date: {}\n'.format(datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")))
 
 # Add new communication dialog to communication recording json.
 def add_new_content(role, content):
@@ -80,7 +80,7 @@ def add_new_content(role, content):
     with open("./recordings/communication_recording.json", "w+") as outfile:
         outfile.write(json_object)
     with open("./recordings/communication_recording.txt", "a") as outfile:
-        outfile.write('{}  {}: {}'.format(datetime.datetime.now(), role, content))
+        outfile.write('\n{}  {}: {}'.format(datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"), role, content))
 
 def take_picture_dataset():
     emotion_folder_list = ['anger', 'disgust', 'sad', 'surprise', 'neutral']
