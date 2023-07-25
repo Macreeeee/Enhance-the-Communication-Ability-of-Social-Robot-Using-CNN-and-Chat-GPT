@@ -23,14 +23,17 @@ class Application(Frame):
         self.QUIT = Button(self)
         self.INITIAL = Button(self)
         self.START = Button(self)
-        self.STOP = Button(self)
+        self.TEST = Button(self)
 
         self.ENABLE_FR = Button(self)
         self.ENABLE_ACTION = Button(self)
 
         self.log_window = Text(self)
         self.recording_window = Text(self)
-        self.picture_window = Label(self, image=ImageTk.PhotoImage(file="recordings/pictures/tmp_image.jpg"))
+
+        sample_img=ImageTk.PhotoImage(Image.open("recordings/pictures/User_Icon.jpg"))
+        self.picture_window = Label(self, image=sample_img, width=160, height=120)
+        self.picture_window.img = sample_img
 
         self.pack()
 
@@ -81,8 +84,11 @@ class Application(Frame):
         self.recording_window.delete('1.0', END)
         self.add_log('Communication recording cleared')
 
-    def load_picture(self):
-        pass
+    def refresh_picture(self):
+        tmp_img = ImageTk.PhotoImage(Image.open("recordings/pictures/tmp_image.jpg"))
+        self.picture_window.configure(image=tmp_img)
+        self.picture_window.img = tmp_img
+        # self.picture_window.update()
 
     def start_communication(self):
         nao = False
@@ -166,7 +172,6 @@ class Application(Frame):
                         end = True
             self.add_log('communication ended', color='blue')
 
-
     def on_quit(self):
         self.add_log('\nQuit application, please wait...', color='blue')
         try:
@@ -180,7 +185,7 @@ class Application(Frame):
             self.quit()
 
     def initial_build(self):
-        self.add_log('initial building...',color='blue')
+        self.add_log('initial building...', color='blue')
 
         self.recording_file = open(
             'recordings/communication_recording.txt',
@@ -219,7 +224,6 @@ class Application(Frame):
         # self.log_window.tag_add("red", "4.0", "4.5")
         # self.log_window.tag_add("grey", "2.0", "3.0 lineend")
 
-
         self.QUIT["text"] = "QUIT"
         self.QUIT["fg"] = "red"
         self.QUIT["command"] = self.on_quit
@@ -236,6 +240,10 @@ class Application(Frame):
         self.START["text"] = "start communication",
         self.START["command"] = self.start_communication
         self.START.grid(row=1, column=3)
+
+        self.TEST["text"] = "test",
+        self.TEST["command"] = self.refresh_picture
+        self.TEST.grid(row=1, column=4)
 
 
 if __name__ == '__main__':
