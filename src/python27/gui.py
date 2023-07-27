@@ -3,6 +3,7 @@ import socket
 from main import *
 import time
 import subprocess
+import threading
 from PIL import ImageTk, Image
 
 
@@ -19,6 +20,9 @@ class Application(Frame):
     def __init__(self, master=None):
         Frame.__init__(self, master)
 
+        self.recording_file = open(
+            'recordings/communication_recording.txt',
+            'r')
         self.CLEAR_LOG = Button(self)
         self.QUIT = Button(self)
         self.INITIAL = Button(self)
@@ -27,6 +31,10 @@ class Application(Frame):
 
         self.ENABLE_FR = Button(self)
         self.ENABLE_ACTION = Button(self)
+
+        self.socket_input_label = Label(self, text="GUI socket port:")
+        self.socket_input = Entry(self)
+        self.socket_input.insert(0, '5000')
 
         self.log_window = Text(self)
         self.recording_window = Text(self)
@@ -91,7 +99,7 @@ class Application(Frame):
         # self.picture_window.update()
 
     def start_communication(self):
-        nao = False
+        nao = True
         # path_to_nao_audio = 'nao@nao.local:/home/nao/recordings/recording.wav'
         # path_to_pc_audio = 'D:\GitRepos\COMP66090\cognitive_robot_with_machine_learning\src/recordings/recording.wav'
         # path_to_nao_picture = 'nao@nao.local:/home/nao/recordings/cameras'
@@ -112,10 +120,11 @@ class Application(Frame):
             photoCaptureProxy = ALProxy("ALPhotoCapture", IP, PORT)
             photoCaptureProxy.setResolution(0)
             photoCaptureProxy.setPictureFormat("jpg")
-            photoCaptureProxy.setColorSpace(0)
+            photoCaptureProxy.setColorSpace(13)
 
             # Main loop goes here
-            while True:
+            end = False
+            while not end:
                 audioRecorderProxy.startMicrophonesRecording("/home/nao/recordings/recording.wav", 'wav', 16000,
                                                              (0, 0, 1, 0))
                 print
@@ -128,6 +137,7 @@ class Application(Frame):
                         nao_picture_path_list = photoCaptureProxy.takePictures(1, "/home/nao/recordings/cameras/",
                                                                                "image")
                         file_transfer(path_to_nao_picture + '/image.jpg', path_to_pc_picture + '/tmp_image.jpg')
+                        self.refresh_picture()
                         self.conn_fer.sendall('run_fer_model'.encode())
                         prediction = wait_until_receive(self.conn_fer)
                         print(prediction)
@@ -155,6 +165,12 @@ class Application(Frame):
                 add_new_content('assistant', response)
 
                 textToSpeechProxy.say(response)
+                self.read_recording()
+                self.log_window.update()
+                for eos in ['goodbye', 'Goodbye', 'bye', 'Bye']:
+                    if eos in response:
+                        end = True
+            self.add_log('communication ended', color='blue')
         else:
             end = False
             while not end:
@@ -184,16 +200,18 @@ class Application(Frame):
         except:
             self.quit()
 
+    def run_initial_build(self):
+        threading.Thread(target=self.initial_build).start()
+
     def initial_build(self):
         self.add_log('initial building...', color='blue')
-
-        self.recording_file = open(
-            'recordings/communication_recording.txt',
-            'r')
-        self.read_recording()
-
-        self.s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-        self.s.bind(('localhost', 5000))
+        try:
+            self.s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+            self.s.bind(('localhost', int(self.entry1.get())))
+            self.add_log('Socket connected to port {}'.format(self.entry1.get()), color='blue')
+        except:
+            self.add_log('Socket failed to connected to port {}, please try another port'.format(self.entry1.get()), color='blue')
+            return
         self.s.listen(2)
 
         subprocess.Popen("python face_expression_recognition.py")
@@ -209,8 +227,9 @@ class Application(Frame):
 
     def createWidgets(self):
         self.recording_window.grid(row=0, column=0)
-        self.log_window.grid(row=0, column=1)
-        self.picture_window.grid(row=0, column=2)
+        self.read_recording()
+        self.log_window.grid(row=0, column=2)
+        self.picture_window.grid(row=0, column=1)
         self.add_log("Welcome to NAO's communication manager.", color='blue')
         self.add_log("Press 'initial build' for initialization. \nPress 'start "
                      "communication for start communication. \nNote: you must do initial building before start "
@@ -227,23 +246,26 @@ class Application(Frame):
         self.QUIT["text"] = "QUIT"
         self.QUIT["fg"] = "red"
         self.QUIT["command"] = self.on_quit
-        self.QUIT.grid(row=1, column=0)
+        self.QUIT.grid(row=20, column=0)
 
         self.CLEAR_LOG["text"] = "clear recording",
         self.CLEAR_LOG["command"] = self.clear_recording
-        self.CLEAR_LOG.grid(row=1, column=1)
+        self.CLEAR_LOG.grid(row=2, column=0)
+
+        self.socket_input_label.grid(row=3, column=0)
+        self.socket_input.grid(row=3, column=1)
 
         self.INITIAL["text"] = "initial build",
-        self.INITIAL["command"] = self.initial_build
-        self.INITIAL.grid(row=1, column=2)
+        self.INITIAL["command"] = self.run_initial_build
+        self.INITIAL.grid(row=4, column=0)
 
         self.START["text"] = "start communication",
         self.START["command"] = self.start_communication
-        self.START.grid(row=1, column=3)
+        self.START.grid(row=5, column=0)
 
         self.TEST["text"] = "test",
         self.TEST["command"] = self.refresh_picture
-        self.TEST.grid(row=1, column=4)
+        self.TEST.grid(row=6, column=0)
 
 
 if __name__ == '__main__':

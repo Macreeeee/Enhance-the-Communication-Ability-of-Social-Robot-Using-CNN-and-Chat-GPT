@@ -1,4 +1,5 @@
 import socket
+import time
 from test2 import *
 
 
@@ -19,9 +20,16 @@ def t1():
 
 def define_and_print_var():
     instance = Var(var=1)
-
     print_var()
 
+def sleep_do():
+    time.sleep(3)
+    print('done')
+    self.add_log('done')
 
 if __name__ == '__main__':
-    define_and_print_var()
+    root = Tk()
+    root.title("Communication Manager")
+    app = Application(master=root)
+    app.mainloop()
+    root.destroy()

@@ -2,3 +2,4 @@ socket
 openai
 pydub
 deepface
+fer

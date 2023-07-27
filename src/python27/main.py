@@ -9,7 +9,7 @@ import socket
 from Tkinter import *
 from gui import *
 
-nao = False
+nao = True
 path_to_nao_audio = 'nao@nao.local:/home/nao/recordings/recording.wav'
 path_to_pc_audio = 'D:\GitRepos\COMP66090\cognitive_robot_with_machine_learning\src/recordings/recording.wav'
 path_to_nao_picture = 'nao@nao.local:/home/nao/recordings/cameras'
@@ -83,7 +83,9 @@ def add_new_content(role, content):
         outfile.write('\n{}  {}: {}'.format(datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"), role, content))
 
 def take_picture_dataset():
-    emotion_folder_list = ['anger', 'disgust', 'sad', 'surprise', 'neutral']
+    textToSpeechProxy.say('Hello. Taking picture data set start.')
+    time.sleep(0.5)
+    emotion_folder_list = ['happy', 'neutral', 'sad', 'surprise']
     for e in emotion_folder_list:
         try:
             os.mkdir(path_to_pc_picture + '/' + e)
@@ -91,15 +93,27 @@ def take_picture_dataset():
             pass
         textToSpeechProxy.say(e)
         time.sleep(0.5)
-        for i in range(10):
+        for i in range(30):
             textToSpeechProxy.say(str(i))
-            time.sleep(0.5)
+            time.sleep(0.2)
             photoCaptureProxy.takePictures(1, "/home/nao/recordings/cameras/", "image")
             file_transfer(path_to_nao_picture + '/image.jpg', path_to_pc_picture + '/{}/image{}.jpg'.format(e, str(i)))
     textToSpeechProxy.say('picture taking done. thanks for participating!')
     exit()
 
+def stop_audio_recording():
+    try:
+        IP = "nao.local"
+        PORT = 9559
+        audioRecorderProxy = ALProxy("ALAudioRecorder", IP, PORT)
+        audioRecorderProxy.stopMicrophonesRecording()
+    except:
+        pass
+
 if __name__ == "__main__":
+
+    # stop_audio_recording()
+    # exit()
     root = Tk()
     root.title("Communication Manager")
     app = Application(master=root)
@@ -108,7 +122,6 @@ if __name__ == "__main__":
 
     print('GUI finished. Exit')
     exit()
-
 
     path_to_nao_audio = 'nao@nao.local:/home/nao/recordings/recording.wav'
     path_to_pc_audio = 'D:\GitRepos\COMP66090\cognitive_robot_with_machine_learning\src/recordings/recording.wav'
@@ -133,11 +146,11 @@ if __name__ == "__main__":
         photoCaptureProxy = ALProxy("ALPhotoCapture", IP, PORT)
         photoCaptureProxy.setResolution(0)
         photoCaptureProxy.setPictureFormat("jpg")
-        photoCaptureProxy.setColorSpace(0)
+        photoCaptureProxy.setColorSpace(13)
 
         # take_picture_dataset()
         # audioRecorderProxy.stopMicrophonesRecording()
-
+        exit()
         # Main loop goes here
         while True:
             audioRecorderProxy.startMicrophonesRecording("/home/nao/recordings/recording.wav",  'wav', 16000, (0,0,1,0))

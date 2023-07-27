@@ -3,6 +3,7 @@ import cv2
 import numpy as np
 import matplotlib.pyplot as plt
 from deepface import DeepFace
+from fer import FER
 import time
 from PIL import Image
 import io
@@ -44,7 +45,8 @@ def self_trained_cnn_group_test():
     model.compile()
     emotion_list = ['anger', 'disgust', 'happy', 'sad', 'surprise', 'neutral']
     # emotion_list = ['anger', 'neutral', 'sad', 'disgust', 'happy', 'surprise']
-    emotion_folder_list = ['anger', 'disgust', 'sad', 'surprise', 'neutral']
+    emotion_folder_list = ['anger', 'disgust', 'happy', 'sad', 'surprise', 'neutral']
+    map = {'anger': False, 'disgust': False, 'happy': True, 'sad': False, 'surprise': True, 'neutral': True}
     h = 120
     w = 160
     count = 0
@@ -64,44 +66,89 @@ def self_trained_cnn_group_test():
             end = time.time()
             print('time used: {}'.format(end - start))
             print('true: {}, pre: {}'.format(e, prediction))
+            # if map[prediction] == map[e]:
             if prediction == e:
                 count += 1
     print(count / total)
 
 
-def deep_face():
-    img = cv2.imread('./recordings/pictures/happy/image1.jpg')
-    plt.imshow(img[:, :, :: -1])
+def deep_face(img):
+    # img = cv2.imread('./recordings/pictures/happy/image1.jpg')
+    # plt.imshow(img[:, :, :: -1])
+    try:
+        result = DeepFace.analyze(img, actions=['emotion'])
+        prediction = result[0]['dominant_emotion']
+    except:
+        prediction = 'None'
+    return prediction
 
-    result = DeepFace.analyze(img, actions=['emotion'])
-    print(result)
-
-    x1 = int(result[0]['region']['x'])
-    x2 = x1 + int(result[0]['region']['w'])
-    y1 = int(result[0]['region']['y'])
-    y2 = y1 + int(result[0]['region']['h'])
-    plt.imshow(img[y1:y2, x1:x2, :: -1])
-    plt.show()
+    # x1 = int(result[0]['region']['x'])
+    # x2 = x1 + int(result[0]['region']['w'])
+    # y1 = int(result[0]['region']['y'])
+    # y2 = y1 + int(result[0]['region']['h'])
+    # plt.imshow(img[y1:y2, x1:x2, :: -1])
+    # plt.show()
 
 
 def deep_face_group_test():
-    face_cascade = cv2.CascadeClassifier(cv2.data.haarcascades + 'haarcascade_frontalface_default.xml')
+    # face_cascade = cv2.CascadeClassifier(cv2.data.haarcascades + 'haarcascade_frontalface_default.xml')
     # emotion_list = ['happy']
-    emotion_list = ['anger', 'disgust', 'happy', 'sad', 'surprise', 'neutral']
+    emotion_folder_list = ['anger', 'disgust', 'happy', 'sad', 'surprise', 'neutral']
+    emotion_list = ['angry', 'disgust', 'happy', 'sad', 'surprise', 'neutral']
+    map = {'angry': False, 'disgust': False, 'happy': True, 'sad': False, 'surprise': True, 'neutral': True}
     count = 0
     total = 0
-    for e in emotion_list:
-        for i in range(10):
+    for e in range(len(emotion_folder_list)):
+        for i in range(30):
             total += 1
-            img = cv2.imread('./recordings/pictures/{}/image{}.jpg'.format(e, str(i)))
+            img = cv2.imread('./recordings/pictures/{}/image{}.jpg'.format(emotion_folder_list[e], str(i)))
             # img = face_region(face_cascade, img)
             try:
                 result = DeepFace.analyze(img, actions=['emotion'])
                 prediction = result[0]['dominant_emotion']
             except:
                 prediction = 'None'
-            print('true: {}, pre: {}'.format(e, prediction))
-            if prediction == e:
+                total -= 1
+            print('true: {}, pre: {}'.format(emotion_folder_list[e], prediction))
+            # if map[prediction] == map[e]:
+            if prediction == emotion_list[e]:
+                count += 1
+    print(count / total)
+
+def run_fer(img):
+    try:
+        result = detector.detect_emotions(img)
+        d = result[0]['emotions']
+        prediction = max(d, key=d.get)
+    except:
+        prediction = 'none'
+    return prediction
+
+def fer_group_test():
+    # face_cascade = cv2.CascadeClassifier(cv2.data.haarcascades + 'haarcascade_frontalface_default.xml')
+    # emotion_list = ['anger']
+    emotion_folder_list = ['anger', 'disgust', 'happy', 'sad', 'surprise', 'neutral']
+    emotion_list = ['angry', 'disgust', 'happy', 'sad', 'surprise', 'neutral']
+    count = 0
+    total = 0
+    detector = FER()
+
+    for e in range(len(emotion_folder_list)):
+        for i in range(30):
+            total += 1
+            img = cv2.imread('./recordings/pictures/{}/image{}.jpg'.format(emotion_folder_list[e], str(i)))
+            # img = face_region(face_cascade, img)
+
+            result = detector.detect_emotions(img)
+            try:
+                d = result[0]['emotions']
+                prediction = max(d, key=d.get)
+            except:
+                prediction = 'none'
+                total -=1
+
+            print('true: {}, pre: {}'.format(emotion_folder_list[e], prediction))
+            if prediction == emotion_list[e]:
                 count += 1
     print(count / total)
 
@@ -111,10 +158,13 @@ if __name__ == "__main__":
     # deep_face()
     # deep_face_group_test()
     # self_trained_cnn_group_test()
+    # fer_group_test()
     # face_region()
     # end = time.time()
     # print('Total Time used: {}'.format(end - start))
 
+    model_selection_candidate = ['Fill_CNN', 'deepface', 'fer']
+    model_selection = 'deepface'
     s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     s.connect(('localhost', 5000))
     while True:
@@ -124,16 +174,30 @@ if __name__ == "__main__":
             exit()
         if response == 'load_fer_model':
             try:
-                face_cascade = cv2.CascadeClassifier(cv2.data.haarcascades + 'haarcascade_frontalface_default.xml')
-                model_path = 'D:\GitRepos\COMP66090\cognitive_robot_with_machine_learning\src/fer_model/flicnn_model.keras'
-                model = keras.models.load_model(model_path, compile=False)
-                model.compile()
+                if model_selection == 'Fill_CNN':
+                    face_cascade = cv2.CascadeClassifier(cv2.data.haarcascades + 'haarcascade_frontalface_default.xml')
+                    model_path = 'D:\GitRepos\COMP66090\cognitive_robot_with_machine_learning\src/fer_model/flicnn_model.keras'
+                    model = keras.models.load_model(model_path, compile=False)
+                    model.compile()
+                elif model_selection == 'deepface':
+                    pass
+                elif model_selection == 'fer':
+                    detector = FER()
+                else:
+                    pass
                 s.sendall("fer_model_loaded".encode())
             except:
                 s.sendall("fer_model_load_failed".encode())
         if response == 'run_fer_model':
             img = cv2.imread('./recordings/pictures/tmp_image.jpg')
-            predict = self_trained_cnn(face_cascade, model, img)
+            if model_selection == 'Fill_CNN':
+                predict = self_trained_cnn(face_cascade, model, img)
+            elif model_selection == 'deepface':
+                predict = deep_face(img)
+            elif model_selection == 'fer':
+                predict = run_fer(img)
+            else:
+                predict = deep_face(img)
             # print(predict)
             # data = "predict: {}".format(predict)
             s.sendall(predict.encode())
@@ -147,5 +211,3 @@ if __name__ == "__main__":
     #
     # predict = self_trained_cnn(face_cascade, model, img)
     # print(predict)
-
-

@@ -3,22 +3,6 @@
         {
             "content": "Your name is NAO, you are a robot. Today is Sunday.", 
             "role": "system"
-        }, 
-        {
-            "content": "anyway gonna buy ", 
-            "role": "user"
-        }, 
-        {
-            "content": "Good morning! How can I assist you today? What are you planning to buy?\r\n", 
-            "role": "assistant"
-        }, 
-        {
-            "content": "nothing goodbye ", 
-            "role": "user"
-        }, 
-        {
-            "content": "Alright, if you have any other questions or need assistance in the future, feel free to ask. Have a great day! Goodbye!\r\n", 
-            "role": "assistant"
         }
     ]
 }
