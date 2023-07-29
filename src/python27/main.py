@@ -8,8 +8,10 @@ import os
 import socket
 from Tkinter import *
 from gui import *
+import sys
 
 nao = True
+nao_IP = '169.254.111.149'
 path_to_nao_audio = 'nao@nao.local:/home/nao/recordings/recording.wav'
 path_to_pc_audio = 'D:\GitRepos\COMP66090\cognitive_robot_with_machine_learning\src/recordings/recording.wav'
 path_to_nao_picture = 'nao@nao.local:/home/nao/recordings/cameras'
@@ -42,15 +44,33 @@ def file_transfer(path1, path2):
     subprocess.call(command, stdout=open(os.devnull, 'wb'))
     # command = "plink -l nao -pw nao nao@nao.local 'rm /home/nao/recordings/recording.wav'"
 
+def wait_until_receive(conn):
+    while True:
+        msg = conn.recv(1024)
+        if msg:
+            response = msg.decode()
+            break
+    return response
+
 # def load_fer_model():
-#     global conn
 #     response = "load_fer_model"
-#     conn.sendall(response.encode())
+#     conn_fer.sendall(response.encode())
+#     result = wait_until_receive(conn_fer)
+#     return result
 #
-# def fer_predict():
-#     global conn
-#     response = "run_fer_model"
-#     conn.sendall(response.encode())
+#
+# def load_stt_model(self):
+#     self.add_log('Loading speech to text model: VOSK')
+#     response = "load_stt_model"
+#     self.conn_stt.sendall(response.encode())
+#     while True:
+#         response = self.conn_stt.recv(1024)
+#         if response.decode() == 'stt_model_loaded':
+#             self.add_log('speech to text model loaded')
+#             break
+#         if response.decode() == 'stt_model_load_failed':
+#             self.add_log('speech to text model failed to load')
+#             break
 
 
 
@@ -85,7 +105,7 @@ def add_new_content(role, content):
 def take_picture_dataset():
     textToSpeechProxy.say('Hello. Taking picture data set start.')
     time.sleep(0.5)
-    emotion_folder_list = ['happy', 'neutral', 'sad', 'surprise']
+    emotion_folder_list = ['anger', 'disgust','happy', 'neutral', 'sad', 'surprise']
     for e in emotion_folder_list:
         try:
             os.mkdir(path_to_pc_picture + '/' + e)
@@ -103,26 +123,14 @@ def take_picture_dataset():
 
 def stop_audio_recording():
     try:
-        IP = "nao.local"
+        IP = nao_IP
         PORT = 9559
         audioRecorderProxy = ALProxy("ALAudioRecorder", IP, PORT)
         audioRecorderProxy.stopMicrophonesRecording()
     except:
         pass
 
-if __name__ == "__main__":
-
-    # stop_audio_recording()
-    # exit()
-    root = Tk()
-    root.title("Communication Manager")
-    app = Application(master=root)
-    app.mainloop()
-    root.destroy()
-
-    print('GUI finished. Exit')
-    exit()
-
+def main_verson1():
     path_to_nao_audio = 'nao@nao.local:/home/nao/recordings/recording.wav'
     path_to_pc_audio = 'D:\GitRepos\COMP66090\cognitive_robot_with_machine_learning\src/recordings/recording.wav'
     path_to_nao_picture = 'nao@nao.local:/home/nao/recordings/cameras'
@@ -130,7 +138,7 @@ if __name__ == "__main__":
 
     initial_communication_background()
     if nao:
-        IP = "nao.local"
+        IP = 'nao.local'
         PORT = 9559
         # motion = ALProxy("ALMotion", IP, PORT)
         textToSpeechProxy = ALProxy("ALTextToSpeech", IP, PORT)
@@ -150,11 +158,13 @@ if __name__ == "__main__":
 
         # take_picture_dataset()
         # audioRecorderProxy.stopMicrophonesRecording()
-        exit()
+
         # Main loop goes here
         while True:
-            audioRecorderProxy.startMicrophonesRecording("/home/nao/recordings/recording.wav",  'wav', 16000, (0,0,1,0))
-            print "Audio record started."
+            audioRecorderProxy.startMicrophonesRecording("/home/nao/recordings/recording.wav", 'wav', 16000,
+                                                         (0, 0, 1, 0))
+            print
+            "Audio record started."
             last_time = time.time()
             while True:
                 current_time = time.time()
@@ -166,14 +176,17 @@ if __name__ == "__main__":
                     # print(predict)
                     # print 'picture took {}'.format(current_time)
                 if keyboard.is_pressed("p"):
-                    print 'keyboard interrupt'
+                    print
+                    'keyboard interrupt'
                     break
                 if keyboard.is_pressed("q"):
-                    print 'end conversation'
+                    print
+                    'end conversation'
                     audioRecorderProxy.stopMicrophonesRecording()
                     exit()
             audioRecorderProxy.stopMicrophonesRecording()
-            print 'recording over'
+            print
+            'recording over'
 
             file_transfer(path_to_nao_audio, path_to_pc_audio)
             output = speech_recognition(path_to_pc_audio)
@@ -201,6 +214,20 @@ if __name__ == "__main__":
                 add_new_content('assistant', response)
             except:
                 exit()
+
+
+if __name__ == "__main__":
+    root = Tk()
+    root.title("Communication Manager")
+    app = Application(master=root)
+    app.mainloop()
+    root.destroy()
+
+    print('GUI finished. Exit')
+    exit()
+
+    # main_verson1()
+
 
 
 

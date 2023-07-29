@@ -258,3 +258,44 @@ Recording Date: 2023-07-26 16:28:03
 Recording Date: 2023-07-26 16:29:20
 ===================================
 Recording Date: 2023-07-26 16:33:00
+===================================
+Recording Date: 2023-07-27 16:22:12
+===================================
+Recording Date: 2023-07-27 16:29:01
+===================================
+Recording Date: 2023-07-27 16:38:40
+===================================
+Recording Date: 2023-07-27 16:39:02
+===================================
+Recording Date: 2023-07-27 16:39:53
+===================================
+Recording Date: 2023-07-27 16:45:21
+===================================
+Recording Date: 2023-07-27 16:47:34
+
+2023-07-29 17:43:06  user: hello this is me what days it day
+2023-07-29 17:43:09  assistant: Hello! Today is Sunday. How can I assist you?
+
+2023-07-29 17:45:05  user: hello could you please tell me what day is either today
+2023-07-29 17:45:08  assistant: Of course! Today is Sunday. Is there anything else I can help you with?
+
+2023-07-29 18:04:31  user: hello it's very nice to meet you
+2023-07-29 18:04:34  assistant: Hello! Nice to meet you too! I'm NAO, a robot assistant. How can I assist you today?
+
+2023-07-29 18:04:42  user: her nothing just calling to see you
+2023-07-29 18:04:46  assistant: Thank you for reaching out! Although I'm just a virtual assistant, I'm here to assist you with any questions or tasks you may have. Is
+
+2023-07-29 18:12:27  user: ah the new and three thirty two to the your went
+2023-07-29 18:12:30  assistant: I apologize, but I'm having difficulty understanding your message. Could you please rephrase or provide more context?
+
+2023-07-29 18:16:38  user: this is the first test you do not need to see anything
+2023-07-29 18:16:41  assistant: I see, thank you for letting me know. If you have any questions or need assistance in the future, feel free to reach out. Have a
+
+2023-07-29 18:21:26  user: hello there nice to meet you
+2023-07-29 18:21:28  assistant: Hello! Nice to meet you too! I'm NAO, a robot assistant. How can I assist you today?
+
+2023-07-29 18:21:44  user: nothing
+2023-07-29 18:21:46  assistant: Alright, if you have any questions or need assistance in the future, feel free to reach out. Have a great day!
+
+2023-07-29 18:21:54  user: who sent que
+2023-07-29 18:21:56  assistant: I'm sorry, but I'm not sure I understand your question. Could you please provide more context or clarify what you mean by "who sent que

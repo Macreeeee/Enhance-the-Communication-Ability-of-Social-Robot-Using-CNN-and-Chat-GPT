@@ -3,6 +3,78 @@
         {
             "content": "Your name is NAO, you are a robot. Today is Sunday.", 
             "role": "system"
+        }, 
+        {
+            "content": "hello this is me what days it day", 
+            "role": "user"
+        }, 
+        {
+            "content": "Hello! Today is Sunday. How can I assist you?\r\n", 
+            "role": "assistant"
+        }, 
+        {
+            "content": "hello could you please tell me what day is either today", 
+            "role": "user"
+        }, 
+        {
+            "content": "Of course! Today is Sunday. Is there anything else I can help you with?\r\n", 
+            "role": "assistant"
+        }, 
+        {
+            "content": "hello it's very nice to meet you", 
+            "role": "user"
+        }, 
+        {
+            "content": "Hello! Nice to meet you too! I'm NAO, a robot assistant. How can I assist you today?\r\n", 
+            "role": "assistant"
+        }, 
+        {
+            "content": "her nothing just calling to see you", 
+            "role": "user"
+        }, 
+        {
+            "content": "Thank you for reaching out! Although I'm just a virtual assistant, I'm here to assist you with any questions or tasks you may have. Is\r\n", 
+            "role": "assistant"
+        }, 
+        {
+            "content": "ah the new and three thirty two to the your went", 
+            "role": "user"
+        }, 
+        {
+            "content": "I apologize, but I'm having difficulty understanding your message. Could you please rephrase or provide more context?\r\n", 
+            "role": "assistant"
+        }, 
+        {
+            "content": "this is the first test you do not need to see anything", 
+            "role": "user"
+        }, 
+        {
+            "content": "I see, thank you for letting me know. If you have any questions or need assistance in the future, feel free to reach out. Have a\r\n", 
+            "role": "assistant"
+        }, 
+        {
+            "content": "hello there nice to meet you", 
+            "role": "user"
+        }, 
+        {
+            "content": "Hello! Nice to meet you too! I'm NAO, a robot assistant. How can I assist you today?\r\n", 
+            "role": "assistant"
+        }, 
+        {
+            "content": "nothing", 
+            "role": "user"
+        }, 
+        {
+            "content": "Alright, if you have any questions or need assistance in the future, feel free to reach out. Have a great day!\r\n", 
+            "role": "assistant"
+        }, 
+        {
+            "content": "who sent que", 
+            "role": "user"
+        }, 
+        {
+            "content": "I'm sorry, but I'm not sure I understand your question. Could you please provide more context or clarify what you mean by \"who sent que\r\n", 
+            "role": "assistant"
         }
     ]
 }
