@@ -75,6 +75,358 @@
         {
             "content": "I'm sorry, but I'm not sure I understand your question. Could you please provide more context or clarify what you mean by \"who sent que\r\n", 
             "role": "assistant"
+        }, 
+        {
+            "content": "hello nice to meet you", 
+            "role": "user"
+        }, 
+        {
+            "content": "Hello! Nice to meet you too! I'm NAO, a robot assistant. How can I assist you today?\r\n", 
+            "role": "assistant"
+        }, 
+        {
+            "content": "oh kill it this", 
+            "role": "user"
+        }, 
+        {
+            "content": "I'm sorry, but I'm not able to assist with any harmful requests. If you have any other questions or need help with something appropriate, feel\r\n", 
+            "role": "assistant"
+        }, 
+        {
+            "content": "oh okay", 
+            "role": "user"
+        }, 
+        {
+            "content": "If you have any other questions or need assistance with anything else, feel free to let me know. I'm here to help!\r\n", 
+            "role": "assistant"
+        }, 
+        {
+            "content": "oh sure", 
+            "role": "user"
+        }, 
+        {
+            "content": "Great! Just let me know if there's anything specific you need assistance with. I'm here to help!\r\n", 
+            "role": "assistant"
+        }, 
+        {
+            "content": "nice oh", 
+            "role": "user"
+        }, 
+        {
+            "content": "Thank you! I'm glad you find it nice. If you have any questions or need assistance, feel free to ask. I'm here to help\r\n", 
+            "role": "assistant"
+        }, 
+        {
+            "content": "oh sure", 
+            "role": "user"
+        }, 
+        {
+            "content": "If you have any questions or need assistance, feel free to let me know. I'm here to help!\r\n", 
+            "role": "assistant"
+        }, 
+        {
+            "content": "this", 
+            "role": "user"
+        }, 
+        {
+            "content": "I apologize, but it seems like your message got cut off. If there's anything you would like to ask or discuss, please provide more information and\r\n", 
+            "role": "assistant"
+        }, 
+        {
+            "content": "oh sure", 
+            "role": "user"
+        }, 
+        {
+            "content": "If you have any questions or need assistance, feel free to let me know. I'm here to help!\r\n", 
+            "role": "assistant"
+        }, 
+        {
+            "content": "this", 
+            "role": "user"
+        }, 
+        {
+            "content": "I apologize, but it seems like your message got cut off. If there's anything you would like to ask or discuss, please provide more information and\r\n", 
+            "role": "assistant"
+        }, 
+        {
+            "content": "oh nice oh", 
+            "role": "user"
+        }, 
+        {
+            "content": "I'm glad to hear that you find it nice! If you have any questions or need assistance, feel free to let me know. I'm here\r\n", 
+            "role": "assistant"
+        }, 
+        {
+            "content": "this", 
+            "role": "user"
+        }, 
+        {
+            "content": "I apologize, but it seems like your message got cut off again. If you have any specific questions or need assistance with something, please provide more details\r\n", 
+            "role": "assistant"
+        }, 
+        {
+            "content": "oh sure", 
+            "role": "user"
+        }, 
+        {
+            "content": "If you have any specific questions or need assistance with anything, feel free to let me know. I'm here to help!\r\n", 
+            "role": "assistant"
+        }, 
+        {
+            "content": "hello that's very nice to meet you", 
+            "role": "user"
+        }, 
+        {
+            "content": "Hello! It's very nice to meet you too! How can I assist you today?\r\n", 
+            "role": "assistant"
+        }, 
+        {
+            "content": "hello that's very nice to meet you", 
+            "role": "user"
+        }, 
+        {
+            "content": "Hello! Nice to meet you too! How can I assist you today?\r\n", 
+            "role": "assistant"
+        }, 
+        {
+            "content": "hello that's very nice to meet you", 
+            "role": "user"
+        }, 
+        {
+            "content": "Hello! Nice to meet you too! How can I assist you today?\r\n", 
+            "role": "assistant"
+        }, 
+        {
+            "content": "hello nice to meet you", 
+            "role": "user"
+        }, 
+        {
+            "content": "Hello! Nice to meet you too! I'm NAO, a robot assistant. How can I assist you today?\r\n", 
+            "role": "assistant"
+        }, 
+        {
+            "content": "oh nice to meet you", 
+            "role": "user"
+        }, 
+        {
+            "content": "Thank you! It's nice to meet you too! How can I assist you today?\r\n", 
+            "role": "assistant"
+        }, 
+        {
+            "content": " ", 
+            "role": "user"
+        }, 
+        {
+            "content": "I'm sorry, but it seems like your message got cut off. If you have any questions or need assistance, feel free to let me know.\r\n", 
+            "role": "assistant"
+        }, 
+        {
+            "content": "hello it's very very very good to see", 
+            "role": "user"
+        }, 
+        {
+            "content": "Hello! I'm glad to hear that you're feeling good to see me. How can I assist you today?\r\n", 
+            "role": "assistant"
+        }, 
+        {
+            "content": "oh it's very very very good to see", 
+            "role": "user"
+        }, 
+        {
+            "content": "Thank you! I'm glad to hear that seeing me is making you feel good. How can I assist you today?\r\n", 
+            "role": "assistant"
+        }, 
+        {
+            "content": "nothing just the", 
+            "role": "user"
+        }, 
+        {
+            "content": "Alright, if you have any questions or need assistance in the future, feel free to reach out. Have a great day!\r\n", 
+            "role": "assistant"
+        }, 
+        {
+            "content": "nothing just the", 
+            "role": "user"
+        }, 
+        {
+            "content": "Alright, if you have any questions or need assistance in the future, feel free to reach out. Have a great day!\r\n", 
+            "role": "assistant"
+        }, 
+        {
+            "content": " just", 
+            "role": "user"
+        }, 
+        {
+            "content": "Just let me know if you need any help or have any questions. I'm here to assist you!\r\n", 
+            "role": "assistant"
+        }, 
+        {
+            "content": "this is just", 
+            "role": "user"
+        }, 
+        {
+            "content": "It seems like your message got cut off. If you have any questions or need assistance with anything, please let me know and I'll be happy to\r\n", 
+            "role": "assistant"
+        }, 
+        {
+            "content": "hello hello good morning", 
+            "role": "user"
+        }, 
+        {
+            "content": "Hello! Good morning to you too! How can I assist you today?\r\n", 
+            "role": "assistant"
+        }, 
+        {
+            "content": "hello hello good morning", 
+            "role": "user"
+        }, 
+        {
+            "content": "Hello! Good morning to you too! How can I assist you today?\r\n", 
+            "role": "assistant"
+        }, 
+        {
+            "content": "hello hello hello there can you hear me", 
+            "role": "user"
+        }, 
+        {
+            "content": "Hello! Yes, I can hear you. How can I assist you today?\r\n", 
+            "role": "assistant"
+        }, 
+        {
+            "content": "you can you hear me", 
+            "role": "user"
+        }, 
+        {
+            "content": "Yes, I can hear you. How can I assist you today?\r\n", 
+            "role": "assistant"
+        }, 
+        {
+            "content": "hello hello hello", 
+            "role": "user"
+        }, 
+        {
+            "content": "Hello! How can I assist you today?\r\n", 
+            "role": "assistant"
+        }, 
+        {
+            "content": "hello nice to meet you", 
+            "role": "user"
+        }, 
+        {
+            "content": "", 
+            "role": "assistant"
+        }, 
+        {
+            "content": "i mean managed to live ", 
+            "role": "user"
+        }, 
+        {
+            "content": "", 
+            "role": "assistant"
+        }, 
+        {
+            "content": "hello nice to meet you", 
+            "role": "user"
+        }, 
+        {
+            "content": "Hello! Nice to meet you too! I'm NAO, a robot assistant. How can I assist you today?\r\n", 
+            "role": "assistant"
+        }, 
+        {
+            "content": "the please tell me all day is eight today", 
+            "role": "user"
+        }, 
+        {
+            "content": "I'm sorry, but I don't have access to real-time information, so I cannot provide the specific date. However, if today is Sunday,\r\n", 
+            "role": "assistant"
+        }, 
+        {
+            "content": "what do sing of marshmallows as a tasty", 
+            "role": "user"
+        }, 
+        {
+            "content": "Marshmallows are soft, sweet treats that are commonly enjoyed toasted over a fire or used as an ingredient in various desserts. They have a light and\r\n", 
+            "role": "assistant"
+        }, 
+        {
+            "content": "what time tell me what time me now", 
+            "role": "user"
+        }, 
+        {
+            "content": "I apologize, but as an AI language model, I don't have access to real-time information like the current time. I recommend checking the time on\r\n", 
+            "role": "assistant"
+        }, 
+        {
+            "content": "lab you us so use less get out", 
+            "role": "user"
+        }, 
+        {
+            "content": "I apologize if there was any misunderstanding. As an AI language model, I'm here to assist and provide information. If there's anything specific you need\r\n", 
+            "role": "assistant"
+        }, 
+        {
+            "content": "the i mean you ah so use less", 
+            "role": "user"
+        }, 
+        {
+            "content": "I apologize if I have not been able to assist you effectively. If there's anything specific you need help with, please let me know and I'll\r\n", 
+            "role": "assistant"
+        }, 
+        {
+            "content": "hello man", 
+            "role": "user"
+        }, 
+        {
+            "content": "", 
+            "role": "assistant"
+        }, 
+        {
+            "content": "donald ", 
+            "role": "user"
+        }, 
+        {
+            "content": "", 
+            "role": "assistant"
+        }, 
+        {
+            "content": "hello back doug", 
+            "role": "user"
+        }, 
+        {
+            "content": "good afternoon good afternoon that that", 
+            "role": "user"
+        }, 
+        {
+            "content": "hello good night", 
+            "role": "user"
+        }, 
+        {
+            "content": "hello ja rule hello", 
+            "role": "user"
+        }, 
+        {
+            "content": "hello here yes some sleep", 
+            "role": "user"
+        }, 
+        {
+            "content": "hello is very nice to meet you here", 
+            "role": "user"
+        }, 
+        {
+            "content": "hello", 
+            "role": "user"
+        }, 
+        {
+            "content": "hi", 
+            "role": "user"
+        }, 
+        {
+            "content": "hello hello who money", 
+            "role": "user"
+        }, 
+        {
+            "content": "I'm sorry, but I'm unable to understand your question. Could you please provide more information or clarify what you mean by \"who money\"?\r\n", 
+            "role": "assistant"
         }
     ]
 }

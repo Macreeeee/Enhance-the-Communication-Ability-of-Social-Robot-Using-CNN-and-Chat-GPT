@@ -13,8 +13,9 @@ import numpy as np
 path_to_nao_audio = 'nao@nao.local:/home/nao/recordings/recording.wav'
 path_to_pc_audio = 'recordings/recording.wav'
 
+
 def load_stt_model():
-    path = 'D:\GitRepos\COMP66090\cognitive_robot_with_machine_learning\src/vosk-model-small-en-us-0.15'
+    path = 'vosk-model-small-en-us-0.15'
     # path = 'D:\GitRepos\COMP66090\cognitive_robot_with_machine_learning\src/vosk-model-en-us-0.22-lgraph'
     if not os.path.exists(path):
         print("no vosk model find")
@@ -99,12 +100,12 @@ def run_stt_model(stream, rec):
     print(' '.join(total))
     end = time.time()
     print('speech recognized, time used: {}'.format(end - start))
+    stream.close()
     return ' '.join(total)
 
 
-if __name__ == '__main__':
-    socket_enable = True
-    if not socket_enable:
+def main(socket_enable=True):
+    if not socket_enable:  # for testing sub functions
         rec = load_stt_model()
         stream = read_stt_stream(False)
         run_stt_model(stream, rec)
@@ -139,3 +140,7 @@ if __name__ == '__main__':
                 except:
                     print('error when process stt model, please load model again.')
                     exit(1)
+
+
+if __name__ == '__main__':
+    main()

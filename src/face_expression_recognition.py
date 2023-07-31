@@ -17,6 +17,8 @@ def face_region(face_cascade, img):
     #     cv2.rectangle(img, (x, y), (x + w, y + h), (0, 255, 0), 2)
     try:
         (x, y, w, h) = faces[0]
+        cv2.imwrite('./recordings/pictures/tmp_image.jpg', cv2.rectangle(img, (x, y), (x + w, y + h), (0, 255, 0), 2))
+
     except:
         print('no face region find')
         return img
@@ -40,7 +42,7 @@ def self_trained_cnn(face_cascade, model, image):
 
 def self_trained_cnn_group_test():
     face_cascade = cv2.CascadeClassifier(cv2.data.haarcascades + 'haarcascade_frontalface_default.xml')
-    path = 'D:\GitRepos\COMP66090\cognitive_robot_with_machine_learning\src/fer_model/flicnn_model.keras'
+    path = 'fer_model/flicnn_model.keras'
     model = keras.models.load_model(path, compile=False)
     model.compile()
     emotion_list = ['anger', 'disgust', 'happy', 'sad', 'surprise', 'neutral']
@@ -164,9 +166,9 @@ if __name__ == "__main__":
     # print('Total Time used: {}'.format(end - start))
 
     model_selection_candidate = ['Fill_CNN', 'deepface', 'fer']
-    model_selection = 'deepface'
+    model_selection = sys.argv[2]
     s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-    s.connect(('localhost', 5000))
+    s.connect(('localhost', int(sys.argv[1])))
     while True:
         response = s.recv(1024).decode()
         if response == 'quit':
@@ -176,7 +178,7 @@ if __name__ == "__main__":
             try:
                 if model_selection == 'Fill_CNN':
                     face_cascade = cv2.CascadeClassifier(cv2.data.haarcascades + 'haarcascade_frontalface_default.xml')
-                    model_path = 'D:\GitRepos\COMP66090\cognitive_robot_with_machine_learning\src/fer_model/flicnn_model.keras'
+                    model_path = 'fer_model/flicnn_model.keras'
                     model = keras.models.load_model(model_path, compile=False)
                     model.compile()
                 elif model_selection == 'deepface':

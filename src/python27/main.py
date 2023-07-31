@@ -11,9 +11,9 @@ from gui import *
 import sys
 
 nao = True
-nao_IP = '169.254.111.149'
+nao_IP = '169.254.239.154'
 path_to_nao_audio = 'nao@nao.local:/home/nao/recordings/recording.wav'
-path_to_pc_audio = 'D:\GitRepos\COMP66090\cognitive_robot_with_machine_learning\src/recordings/recording.wav'
+path_to_pc_audio = './recordings/recording.wav'
 path_to_nao_picture = 'nao@nao.local:/home/nao/recordings/cameras'
 path_to_pc_picture = 'D:\GitRepos\COMP66090\cognitive_robot_with_machine_learning\src/recordings/pictures'
 #
@@ -26,13 +26,13 @@ path_to_pc_picture = 'D:\GitRepos\COMP66090\cognitive_robot_with_machine_learnin
 
 # Call chat gpt through recorded json file.
 def call_gpt():
-    command = "python D:\GitRepos\COMP66090\cognitive_robot_with_machine_learning\src\chat.py"
+    command = "python chat.py"
     output = subprocess.check_output(command, shell=True)
     return output
 
 # Send audio recording .wav to Vosk model.
 def speech_recognition(path):
-    command = "python D:\GitRepos\COMP66090\cognitive_robot_with_machine_learning\src/speech_to_text.py " + path
+    command = "python speech_to_text.py " + path
     output = subprocess.check_output(command, shell=True)
     output = output.split('\n')
 
@@ -40,6 +40,7 @@ def speech_recognition(path):
 
 # Transfer recording.wav from NAO to src.
 def file_transfer(path1, path2):
+    print('transfer file')
     command = 'pscp -pw nao {} {}'.format(path1, path2)
     subprocess.call(command, stdout=open(os.devnull, 'wb'))
     # command = "plink -l nao -pw nao nao@nao.local 'rm /home/nao/recordings/recording.wav'"
@@ -132,9 +133,9 @@ def stop_audio_recording():
 
 def main_verson1():
     path_to_nao_audio = 'nao@nao.local:/home/nao/recordings/recording.wav'
-    path_to_pc_audio = 'D:\GitRepos\COMP66090\cognitive_robot_with_machine_learning\src/recordings/recording.wav'
+    path_to_pc_audio = 'recordings/recording.wav'
     path_to_nao_picture = 'nao@nao.local:/home/nao/recordings/cameras'
-    path_to_pc_picture = 'D:\GitRepos\COMP66090\cognitive_robot_with_machine_learning\src/recordings/pictures'
+    path_to_pc_picture = 'recordings/pictures'
 
     initial_communication_background()
     if nao:
