@@ -9,6 +9,7 @@ from PIL import Image
 import io
 import sys
 import socket
+import os
 
 
 def face_region(face_cascade, img):
@@ -117,6 +118,7 @@ def deep_face_group_test():
                 count += 1
     print(count / total)
 
+
 def run_fer(img):
     try:
         result = detector.detect_emotions(img)
@@ -125,6 +127,7 @@ def run_fer(img):
     except:
         prediction = 'none'
     return prediction
+
 
 def fer_group_test():
     # face_cascade = cv2.CascadeClassifier(cv2.data.haarcascades + 'haarcascade_frontalface_default.xml')
@@ -147,7 +150,7 @@ def fer_group_test():
                 prediction = max(d, key=d.get)
             except:
                 prediction = 'none'
-                total -=1
+                total -= 1
 
             print('true: {}, pre: {}'.format(emotion_folder_list[e], prediction))
             if prediction == emotion_list[e]:
@@ -155,20 +158,33 @@ def fer_group_test():
     print(count / total)
 
 
-if __name__ == "__main__":
-    # start = time.time()
-    # deep_face()
-    # deep_face_group_test()
-    # self_trained_cnn_group_test()
-    # fer_group_test()
-    # face_region()
-    # end = time.time()
-    # print('Total Time used: {}'.format(end - start))
+def face_recognition(img1_path, img2_path):
+    try:
+        result = DeepFace.verify(img1_path=img1_path, img2_path=img2_path, model_name="VGG-Face",
+                                 distance_metric="cosine")
+        print(result['distance'])
+        result = result['verified']
+        print('one face verified')
+    except:
+        result = False
+        print('no face can be recognized')
+    return result
 
+
+def recognition_from_data(img_path, directory):
+    for filename in os.listdir(directory):
+        f = os.path.join(directory, filename)
+        if os.path.isfile(f):
+            result = face_recognition(img_path, f)
+            if result:
+                return filename[:-4]
+    return '?'
+
+def main(port, model_name):
     model_selection_candidate = ['Fill_CNN', 'deepface', 'fer']
-    model_selection = sys.argv[2]
+    model_selection = model_name
     s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-    s.connect(('localhost', int(sys.argv[1])))
+    s.connect(('localhost', port))
     while True:
         response = s.recv(1024).decode()
         if response == 'quit':
@@ -203,6 +219,22 @@ if __name__ == "__main__":
             # print(predict)
             # data = "predict: {}".format(predict)
             s.sendall(predict.encode())
+        if response == 'face_recognition':
+            name = recognition_from_data('./recordings/pictures/tmp_image.jpg', 'recordings/face_data')
+            s.sendall(name.encode())
+
+if __name__ == "__main__":
+    # start = time.time()
+    # deep_face()
+    # deep_face_group_test()
+    # self_trained_cnn_group_test()
+    # fer_group_test()
+    # face_region()
+    # end = time.time()
+    # print('Total Time used: {}'.format(end - start))
+    main(int(sys.argv[1]), sys.argv[2])
+
+
 
     # face_cascade = cv2.CascadeClassifier(cv2.data.haarcascades + 'haarcascade_frontalface_default.xml')
     # model_path = 'D:\GitRepos\COMP66090\cognitive_robot_with_machine_learning\src/fer_model/flicnn_model.keras'

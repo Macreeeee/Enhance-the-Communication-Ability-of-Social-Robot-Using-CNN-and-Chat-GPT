@@ -11,11 +11,13 @@ from gui import *
 import sys
 
 nao = True
-nao_IP = '169.254.239.154'
+nao_IP = '169.254.172.87'
 path_to_nao_audio = 'nao@nao.local:/home/nao/recordings/recording.wav'
 path_to_pc_audio = './recordings/recording.wav'
 path_to_nao_picture = 'nao@nao.local:/home/nao/recordings/cameras'
 path_to_pc_picture = 'D:\GitRepos\COMP66090\cognitive_robot_with_machine_learning\src/recordings/pictures'
+
+
 #
 # def bind_socket():
 #     global s, conn, addr
@@ -30,6 +32,7 @@ def call_gpt():
     output = subprocess.check_output(command, shell=True)
     return output
 
+
 # Send audio recording .wav to Vosk model.
 def speech_recognition(path):
     command = "python speech_to_text.py " + path
@@ -38,12 +41,14 @@ def speech_recognition(path):
 
     return output
 
+
 # Transfer recording.wav from NAO to src.
 def file_transfer(path1, path2):
     print('transfer file')
     command = 'pscp -pw nao {} {}'.format(path1, path2)
     subprocess.call(command, stdout=open(os.devnull, 'wb'))
     # command = "plink -l nao -pw nao nao@nao.local 'rm /home/nao/recordings/recording.wav'"
+
 
 def wait_until_receive(conn):
     while True:
@@ -52,6 +57,7 @@ def wait_until_receive(conn):
             response = msg.decode()
             break
     return response
+
 
 # def load_fer_model():
 #     response = "load_fer_model"
@@ -74,7 +80,6 @@ def wait_until_receive(conn):
 #             break
 
 
-
 # Initially create or re-write communication recording.json with basic chat-GPT content.
 # Initially create or re-write communication recording.txt with time.
 def initial_communication_background():
@@ -92,9 +97,12 @@ def initial_communication_background():
         outfile.write('===================================\n')
         outfile.write('Recording Date: {}\n'.format(datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")))
 
+
 # Add new communication dialog to communication recording json.
-def add_new_content(role, content):
+def add_new_content(role, content, name='?'):
     log = json.load(open("./recordings/communication_recording.json", "r"))
+    if name != '?':
+        content = name + ': ' + content
     log['log'].append({"role": role, "content": content})
     json_object = json.dumps(log, indent=4)
 
@@ -103,10 +111,11 @@ def add_new_content(role, content):
     with open("./recordings/communication_recording.txt", "a") as outfile:
         outfile.write('\n{}  {}: {}'.format(datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"), role, content))
 
+
 def take_picture_dataset():
     textToSpeechProxy.say('Hello. Taking picture data set start.')
     time.sleep(0.5)
-    emotion_folder_list = ['anger', 'disgust','happy', 'neutral', 'sad', 'surprise']
+    emotion_folder_list = ['anger', 'disgust', 'happy', 'neutral', 'sad', 'surprise']
     for e in emotion_folder_list:
         try:
             os.mkdir(path_to_pc_picture + '/' + e)
@@ -122,6 +131,7 @@ def take_picture_dataset():
     textToSpeechProxy.say('picture taking done. thanks for participating!')
     exit()
 
+
 def stop_audio_recording():
     try:
         IP = nao_IP
@@ -130,6 +140,7 @@ def stop_audio_recording():
         audioRecorderProxy.stopMicrophonesRecording()
     except:
         pass
+
 
 def main_verson1():
     path_to_nao_audio = 'nao@nao.local:/home/nao/recordings/recording.wav'
@@ -218,6 +229,8 @@ def main_verson1():
 
 
 if __name__ == "__main__":
+    # stop_audio_recording()
+    # exit()
     root = Tk()
     root.title("Communication Manager")
     app = Application(master=root)
@@ -228,7 +241,3 @@ if __name__ == "__main__":
     exit()
 
     # main_verson1()
-
-
-
-

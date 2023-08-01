@@ -5,6 +5,7 @@ import time
 import subprocess
 import threading
 from PIL import ImageTk, Image
+import shutil
 
 
 def wait_until_receive(conn):
@@ -37,6 +38,14 @@ class Application(Frame):
         self.ENABLE_FR = Button(self)
         self.ENABLE_ACTION = Button(self)
 
+        self.nao_ip_label = Label(self, text="NAO internet address:")
+        self.nao_ip = Entry(self)
+        self.nao_ip.insert(0, '169.254.172.87')
+
+        self.nao_port_label = Label(self, text="NAO internet port:")
+        self.nao_port = Entry(self)
+        self.nao_port.insert(0, '9559')
+
         self.socket_input_label = Label(self, text="GUI socket port:")
         self.socket_input = Entry(self)
         self.socket_input.insert(0, '5000')
@@ -47,11 +56,17 @@ class Application(Frame):
         sample_img = ImageTk.PhotoImage(Image.open("recordings/pictures/User_Icon.jpg"))
         self.picture_window = Label(self, image=sample_img, width=160, height=120)
         self.picture_window.img = sample_img
-        self.emotion_label = Label(self)
 
-        self.pack()
+        self.emotion_label = Label(self)
+        self.user_name_label = Label(self)
+
+        self.audio_thread = threading.Thread(target=self.audio_thread_function)
+        self.video_thread = threading.Thread(target=self.video_thread_function)
+        self.face_recognition_thread = threading.Thread(target=self.face_recognition_thread_function)
 
         self.createWidgets()
+
+        self.pack()
 
     def start_task(self, time, command):
         self.after(time, command)
@@ -121,15 +136,15 @@ class Application(Frame):
         self.picture_window.img = tmp_img
         # self.picture_window.update()
 
-    def audio_thread(self):
+    def audio_thread_function(self):
         if self.nao.get():
-            IP = nao_IP
-            PORT = 9559
+            IP = self.nao_ip.get()
+            PORT = int(self.nao_port.get())
             audioRecorderProxy = ALProxy("ALAudioRecorder", IP, PORT)
             textToSpeechProxy = ALProxy("ALTextToSpeech", IP, PORT)
             audioDeviceProxy = ALProxy("ALAudioDevice", IP, PORT)
 
-            textToSpeechProxy.say('Hi')
+            textToSpeechProxy.say('Let us start talk')
             while not self.stopping:
                 audioDeviceProxy.playSine(500, 40, 0, 0.2)
                 time.sleep(0.2)
@@ -141,7 +156,7 @@ class Application(Frame):
                 file_transfer(path_to_nao_audio, path_to_pc_audio)
                 self.conn_stt.sendall('run_stt_model'.encode())
                 text = wait_until_receive(self.conn_stt)
-                add_new_content('user', text)
+                add_new_content('user', text, self.user_name_label['text'])
                 self.read_recording()
                 response = call_gpt()
                 print('NAO: ' + response)
@@ -152,7 +167,7 @@ class Application(Frame):
             while not self.stopping:
                 self.conn_stt.sendall('run_stt_model_pc'.encode())
                 text = wait_until_receive(self.conn_stt)
-                add_new_content('user', text)
+                add_new_content('user', text, self.user_name_label['text'])
                 self.read_recording()
                 response = call_gpt()
                 print('NAO: ' + response)
@@ -169,10 +184,10 @@ class Application(Frame):
         self.emotion_label['text'] = prediction
         self.emotion_label.update()
 
-    def video_thread(self):
+    def video_thread_function(self):
         if self.nao.get():
-            IP = nao_IP
-            PORT = 9559
+            IP = self.nao_ip.get()
+            PORT = int(self.nao_port.get())
             photoCaptureProxy = ALProxy("ALPhotoCapture", IP, PORT)
             photoCaptureProxy.setResolution(0)
             photoCaptureProxy.setPictureFormat("jpg")
@@ -193,25 +208,69 @@ class Application(Frame):
                     self.emotion_label.update()
         self.add_log('Video thread ended', color='blue')
 
-    def start_communication_version1(self):
+    def face_recognition_thread_function(self):
+        IP = self.nao_ip.get()
+        PORT = int(self.nao_port.get())
+        audioRecorderProxy = ALProxy("ALAudioRecorder", IP, PORT)
+        textToSpeechProxy = ALProxy("ALTextToSpeech", IP, PORT)
+        audioDeviceProxy = ALProxy("ALAudioDevice", IP, PORT)
+        photoCaptureProxy = ALProxy("ALPhotoCapture", IP, PORT)
+        photoCaptureProxy.setResolution(0)
+        photoCaptureProxy.setPictureFormat("jpg")
+        photoCaptureProxy.setColorSpace(13)
+        photoCaptureProxy.takePictures(1, "/home/nao/recordings/cameras/", "image")
+
+        file_transfer(path_to_nao_picture + '/image.jpg', path_to_pc_picture + '/tmp_image.jpg')
+        self.conn_fer.send('face_recognition'.encode())
+        response = wait_until_receive(self.conn_fer)
+        if response == '?':
+            textToSpeechProxy.say('Hi, new person! Can you tell me what is your name?')
+            audioDeviceProxy.playSine(500, 40, 0, 0.2)
+            time.sleep(0.3)
+            audioRecorderProxy.startMicrophonesRecording("/home/nao/recordings/recording.wav", 'wav', 16000,
+                                                         (0, 0, 1, 0))
+            time.sleep(4)
+            audioRecorderProxy.stopMicrophonesRecording()
+            audioDeviceProxy.playSine(500, 40, 0, 0.2)
+            file_transfer(path_to_nao_audio, path_to_pc_audio)
+            self.conn_stt.sendall('run_stt_model'.encode())
+            text = wait_until_receive(self.conn_stt)
+            if text == '.':
+                text = 'No-Name'
+            text = text.split(' ')[-1]
+            textToSpeechProxy.say('Alright! Nice to meet you, {}'.format(text))
+            shutil.move('recordings/pictures/tmp_image.jpg', 'recordings/face_data/{}.jpg'.format(text))
+            name = text
+        else:
+            textToSpeechProxy.say('Hi, {}, meet you again'.format(response))
+            name = response
+        print('face recognition finished')
+        self.user_name_label['text'] = name
+        # self.user_name_label.update()
+
+    def on_start(self):
         print('start communication')
-        self.NAO_ENABLE.config(state=DISABLED)
-        # self.NAO['state'] = DISABLED
+        self.START.config(state=DISABLED)
+
         self.add_log('NAO enable: {}'.format(self.nao.get()), color='blue')
-        # print('start audio thread')
-        # self.audio_thread = threading.Thread(target=self.audio_thread).start()
+        print('start face recognition thread')
+        self.face_recognition_thread.start()
+        while self.face_recognition_thread.is_alive():
+            pass
+        print('start audio thread')
+        self.audio_thread.start()
         print('start video thread')
-        self.video_thread = threading.Thread(target=self.video_thread).start()
+        self.video_thread.start()
 
     def on_stop(self):
         self.add_log('\nTrying to end communication, please wait...', color='grey')
         if not self.stopping:
             self.stopping = True
             self.STOP['state'] = DISABLED
-            if not self.audio_thread and not self.video_thread:
+            while not self.audio_thread.is_alive() and not self.video_thread.is_alive():
                 self.stopping = False
-                self.stop['state'] = NORMAL
-                self.NAO_ENABLE['state'] = NORMAL
+                self.STOP['state'] = NORMAL
+                self.START['state'] = NORMAL
 
     def on_quit(self):
         self.add_log('\nQuit application, please wait...', color='blue')
@@ -248,8 +307,9 @@ class Application(Frame):
 
         for sp in subprocesses:
             if sp == 'fer':
-                fer_model_name = 'deepface'
-                subprocess.Popen("python face_expression_recognition.py {} {}".format(self.socket_input.get(), fer_model_name))
+                fer_model_name = 'Fill_CNN'
+                subprocess.Popen(
+                    "python face_expression_recognition.py {} {}".format(self.socket_input.get(), fer_model_name))
                 self.conn_fer, self.addr_fer = self.s.accept()
                 print('fer connect accepted, will use model: {}'.format(fer_model_name))
                 self.load_fer_model()
@@ -301,31 +361,40 @@ class Application(Frame):
         self.CLEAR_LOG["command"] = self.clear_recording
         self.CLEAR_LOG.grid(row=2, column=0)
 
-        self.socket_input_label.grid(row=3, column=0)
-        self.socket_input.grid(row=3, column=1)
+        self.socket_input_label.grid(row=5, column=0)
+        self.socket_input.grid(row=5, column=1)
 
-        self.emotion_label['text'] = 'None'
+        self.nao_ip_label.grid(row=3, column=0)
+        self.nao_ip.grid(row=3, column=1)
+
+        self.nao_port_label.grid(row=4, column=0)
+        self.nao_port.grid(row=4, column=1)
+
+        self.emotion_label['text'] = 'None emotion'
         self.emotion_label.grid(row=1, column=1)
+
+        self.user_name_label['text'] = 'None name'
+        self.user_name_label.grid(row=2, column=1)
 
         self.INITIAL["text"] = "initial build",
         self.INITIAL["command"] = self.run_initial_build
-        self.INITIAL.grid(row=4, column=0)
+        self.INITIAL.grid(row=8, column=0)
 
         self.START["text"] = "start communication",
-        self.START["command"] = self.start_communication_version1
-        self.START.grid(row=5, column=0)
+        self.START["command"] = self.on_start
+        self.START.grid(row=9, column=0)
 
         self.STOP["text"] = "stop communication",
         self.STOP["command"] = self.on_stop
-        self.STOP.grid(row=7, column=0)
+        self.STOP.grid(row=10, column=0)
 
         self.NAO_ENABLE["text"] = "nao available",
         self.NAO_ENABLE["variable"] = self.nao
-        self.NAO_ENABLE.grid(row=10, column=0)
+        self.NAO_ENABLE.grid(row=11, column=0)
 
         self.TEST["text"] = "test",
         self.TEST["command"] = self.refresh_picture
-        self.TEST.grid(row=6, column=0)
+        self.TEST.grid(row=12, column=0)
 
 
 if __name__ == '__main__':

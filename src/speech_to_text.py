@@ -101,6 +101,8 @@ def run_stt_model(stream, rec):
     end = time.time()
     print('speech recognized, time used: {}'.format(end - start))
     stream.close()
+    if ' '.join(total) == '':
+        return '.'
     return ' '.join(total)
 
 

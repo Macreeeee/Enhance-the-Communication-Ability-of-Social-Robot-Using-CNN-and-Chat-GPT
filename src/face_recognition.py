@@ -14,11 +14,11 @@ models = [
   "SFace",
 ]
 
-img1_path = 'D:\GitRepos\COMP66090\cognitive_robot_with_machine_learning\src/recordings\pictures/happy\image1.jpg'
-img2_path = 'D:\GitRepos\COMP66090\cognitive_robot_with_machine_learning\src/recordings\pictures/happy\image3.jpg'
-img_ex_path = 'D:\GitRepos\COMP66090\cognitive_robot_with_machine_learning\src/recordings\pictures/happy\example.jfif'
-img_db_path = 'D:\GitRepos\COMP66090\cognitive_robot_with_machine_learning\src/recordings\pictures/happy'
-result = DeepFace.verify(img1_path=img1_path, img2_path=img_ex_path)
+img1_path = 'recordings/pictures/tmp_image.jpg'
+img2_path = 'recordings/face_data/jack.jpg'
+img_ex_path = 'recordings\pictures/happy\example.jfif'
+img_db_path = 'recordings\pictures/happy'
+result = DeepFace.verify(img1_path=img1_path, img2_path=img2_path)
 print(result)
 
 # dfs = DeepFace.find(img_path = img1_path, db_path = img_db_path)
