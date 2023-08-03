@@ -40,7 +40,7 @@ class Application(Frame):
 
         self.nao_ip_label = Label(self, text="NAO internet address:")
         self.nao_ip = Entry(self)
-        self.nao_ip.insert(0, '169.254.172.87')
+        self.nao_ip.insert(0, nao_IP)
 
         self.nao_port_label = Label(self, text="NAO internet port:")
         self.nao_port = Entry(self)
@@ -60,8 +60,10 @@ class Application(Frame):
         self.emotion_label = Label(self)
         self.user_name_label = Label(self)
 
-        self.audio_thread = threading.Thread(target=self.audio_thread_function)
-        self.video_thread = threading.Thread(target=self.video_thread_function)
+        self.audio_thread = threading.Thread(target=self.audio_thread_function,
+                                             args=(self.nao_ip.get(), self.nao_port.get()))
+        self.video_thread = threading.Thread(target=self.video_thread_function,
+                                             args=(self.nao_ip.get(), self.nao_port.get()))
         self.face_recognition_thread = threading.Thread(target=self.face_recognition_thread_function)
 
         self.createWidgets()
@@ -72,29 +74,29 @@ class Application(Frame):
         self.after(time, command)
 
     def load_fer_model(self):
-        self.add_log('Loading face expression recognition model')
+        self.add_log('Loading face expression recognition model', color='grey')
         response = "load_fer_model"
         self.conn_fer.sendall(response.encode())
         while True:
             response = self.conn_fer.recv(1024)
             if response.decode() == 'fer_model_loaded':
-                self.add_log('face expression recognition model loaded')
+                self.add_log('face expression recognition model loaded', color='grey')
                 break
             if response.decode() == 'fer_model_load_failed':
-                self.add_log('face expression recognition model failed to load')
+                self.add_log('face expression recognition model failed to load', color='red')
                 break
 
     def load_stt_model(self):
-        self.add_log('Loading speech to text model')
+        self.add_log('Loading speech to text model', color='grey')
         response = "load_stt_model"
         self.conn_stt.sendall(response.encode())
         while True:
             response = self.conn_stt.recv(1024)
             if response.decode() == 'stt_model_loaded':
-                self.add_log('speech to text model loaded')
+                self.add_log('speech to text model loaded', color='grey')
                 break
             if response.decode() == 'stt_model_load_failed':
-                self.add_log('speech to text model failed to load')
+                self.add_log('speech to text model failed to load', color='red')
                 break
 
     def open_camera(self):
@@ -136,15 +138,20 @@ class Application(Frame):
         self.picture_window.img = tmp_img
         # self.picture_window.update()
 
-    def audio_thread_function(self):
+    def audio_thread_function(self, nao_ip, nao_port):
         if self.nao.get():
-            IP = self.nao_ip.get()
-            PORT = int(self.nao_port.get())
-            audioRecorderProxy = ALProxy("ALAudioRecorder", IP, PORT)
-            textToSpeechProxy = ALProxy("ALTextToSpeech", IP, PORT)
-            audioDeviceProxy = ALProxy("ALAudioDevice", IP, PORT)
+            try:
+                IP = self.nao_ip.get()
+                PORT = int(self.nao_port.get())
+                audioRecorderProxy = ALProxy("ALAudioRecorder", nao_ip, nao_port)
+                textToSpeechProxy = ALProxy("ALTextToSpeech", nao_ip, nao_port)
+                audioDeviceProxy = ALProxy("ALAudioDevice", nao_ip, nao_port)
+            except RuntimeError:
+                # print('Cannot connect to tcp://{}:{}'.format(nao_ip, nao_port))
+                self.add_log('Audio thread can not connect to tcp://{}:{}'.format(nao_ip, nao_port), color='red')
+                return
 
-            textToSpeechProxy.say('Let us start talk')
+            textToSpeechProxy.say('Let us start talk! Now, please say something to me')
             while not self.stopping:
                 audioDeviceProxy.playSine(500, 40, 0, 0.2)
                 time.sleep(0.2)
@@ -176,25 +183,42 @@ class Application(Frame):
         self.add_log('Audio thread ended', color='blue')
 
     def take_and_send_picture(self, photoCaptureProxy, conn_fer):
+        print('take and send picture')
         photoCaptureProxy.takePictures(1, "/home/nao/recordings/cameras/", "image")
         file_transfer(path_to_nao_picture + '/image.jpg', path_to_pc_picture + '/tmp_image.jpg')
         conn_fer.sendall('run_fer_model'.encode())
-        prediction = wait_until_receive(conn_fer)
-        self.refresh_picture()
-        self.emotion_label['text'] = prediction
-        self.emotion_label.update()
+        # prediction = wait_until_receive(conn_fer)
+        # self.refresh_picture()
+        # self.emotion_label['text'] = prediction
+        # self.emotion_label.update()
 
-    def video_thread_function(self):
+    def video_thread_function(self, nao_ip, nao_port):
         if self.nao.get():
-            IP = self.nao_ip.get()
-            PORT = int(self.nao_port.get())
-            photoCaptureProxy = ALProxy("ALPhotoCapture", IP, PORT)
-            photoCaptureProxy.setResolution(0)
-            photoCaptureProxy.setPictureFormat("jpg")
-            photoCaptureProxy.setColorSpace(13)
+            try:
+                # IP = self.nao_ip.get()
+                # PORT = int(self.nao_port.get())
+                photoCaptureProxy = ALProxy("ALPhotoCapture", nao_ip, nao_port)
+                photoCaptureProxy.setResolution(0)
+                photoCaptureProxy.setPictureFormat("jpg")
+                photoCaptureProxy.setColorSpace(13)
+            except RuntimeError:
+                print('Cannot connect to tcp://{}:{}'.format(nao_ip, nao_port))
+                self.add_log('Video thread can not connect to tcp://{}:{}'.format(nao_ip, nao_port), color='red')
+                return
             while not self.stopping:
-                threading.Thread(target=self.take_and_send_picture, args=(photoCaptureProxy, self.conn_fer)).start()
-                time.sleep(1)
+            # for i in range(3):
+            #     start = time.time()
+                self.take_and_send_picture(photoCaptureProxy, self.conn_fer)
+                # threading.Thread(target=self.take_and_send_picture, args=(photoCaptureProxy, self.conn_fer)).start()
+                prediction = wait_until_receive(self.conn_fer)
+                self.refresh_picture()
+                time.sleep(0.5)
+                # end = time.time()
+                # print(end - start)
+                print('@@@@@@@@:{}'.format(prediction))
+                # self.emotion_label['text'] = prediction
+                # self.emotion_label.update()
+
 
         else:
             while not self.stopping:
@@ -209,16 +233,25 @@ class Application(Frame):
         self.add_log('Video thread ended', color='blue')
 
     def face_recognition_thread_function(self):
-        IP = self.nao_ip.get()
-        PORT = int(self.nao_port.get())
-        audioRecorderProxy = ALProxy("ALAudioRecorder", IP, PORT)
-        textToSpeechProxy = ALProxy("ALTextToSpeech", IP, PORT)
-        audioDeviceProxy = ALProxy("ALAudioDevice", IP, PORT)
-        photoCaptureProxy = ALProxy("ALPhotoCapture", IP, PORT)
-        photoCaptureProxy.setResolution(0)
-        photoCaptureProxy.setPictureFormat("jpg")
-        photoCaptureProxy.setColorSpace(13)
-        photoCaptureProxy.takePictures(1, "/home/nao/recordings/cameras/", "image")
+        if not self.nao.get():
+            print('Pass face recognition step')
+            self.add_log('Pass face recognition step')
+            return
+        try:
+            IP = self.nao_ip.get()
+            PORT = int(self.nao_port.get())
+            audioRecorderProxy = ALProxy("ALAudioRecorder", IP, PORT)
+            textToSpeechProxy = ALProxy("ALTextToSpeech", IP, PORT)
+            audioDeviceProxy = ALProxy("ALAudioDevice", IP, PORT)
+            photoCaptureProxy = ALProxy("ALPhotoCapture", IP, PORT)
+            photoCaptureProxy.setResolution(0)
+            photoCaptureProxy.setPictureFormat("jpg")
+            photoCaptureProxy.setColorSpace(13)
+            photoCaptureProxy.takePictures(1, "/home/nao/recordings/cameras/", "image")
+        except RuntimeError:
+            print('Cannot connect to tcp://{}'.format(IP))
+            self.add_log('Cannot connect to tcp://{}'.format(IP))
+            return
 
         file_transfer(path_to_nao_picture + '/image.jpg', path_to_pc_picture + '/tmp_image.jpg')
         self.conn_fer.send('face_recognition'.encode())
@@ -251,16 +284,20 @@ class Application(Frame):
     def on_start(self):
         print('start communication')
         self.START.config(state=DISABLED)
+        self.STOP['state'] = NORMAL
 
         self.add_log('NAO enable: {}'.format(self.nao.get()), color='blue')
-        print('start face recognition thread')
-        self.face_recognition_thread.start()
-        while self.face_recognition_thread.is_alive():
-            pass
+        nao_ip = self.nao_ip.get()
+        nao_port = int(self.nao_port.get())
+        self.add_log('Connect to NAO with tcp://{}:{}'.format(nao_ip, nao_port))
+        # print('start face recognition thread')
+        # self.face_recognition_thread.start()
+        # while self.face_recognition_thread.is_alive():
+        #     pass
         print('start audio thread')
-        self.audio_thread.start()
+        self.audio_thread = threading.Thread(target=self.audio_thread_function, args=(nao_ip, nao_port)).start()
         print('start video thread')
-        self.video_thread.start()
+        self.video_thread = threading.Thread(target=self.video_thread_function, args=(nao_ip, nao_port)).start()
 
     def on_stop(self):
         self.add_log('\nTrying to end communication, please wait...', color='grey')
@@ -269,7 +306,7 @@ class Application(Frame):
             self.STOP['state'] = DISABLED
             while not self.audio_thread.is_alive() and not self.video_thread.is_alive():
                 self.stopping = False
-                self.STOP['state'] = NORMAL
+                self.STOP['state'] = DISABLED
                 self.START['state'] = NORMAL
 
     def on_quit(self):
@@ -292,33 +329,34 @@ class Application(Frame):
         subprocesses = ['stt', 'fer']
         if not self.nao.get():
             subprocesses = ['stt', 'fer', 'camera']
-        self.add_log('initial building with functions: {}...'.format(subprocesses), color='blue')
+        self.add_log('initial building start'.format(subprocesses), color='blue', empty_line=True)
+        self.add_log('initial building with functions: {}...'.format(subprocesses), color='grey')
         # self.add_log('NAO enable: {}'.format(self.nao.get()), color='blue')
         try:
             self.s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
             self.s.bind(('localhost', int(self.socket_input.get())))
-            self.add_log('Socket connected to port {}'.format(self.socket_input.get()), color='blue')
+            self.add_log('Application socket use port: {}'.format(self.socket_input.get()), color='grey')
         except:
             self.add_log(
                 'Socket failed to connected to port {}, please try another port'.format(self.socket_input.get()),
-                color='blue')
+                color='red')
             return
         self.s.listen(len(subprocesses))
 
         for sp in subprocesses:
             if sp == 'fer':
-                fer_model_name = 'Fill_CNN'
+                fer_model_name = 'deepface'
                 subprocess.Popen(
                     "python face_expression_recognition.py {} {}".format(self.socket_input.get(), fer_model_name))
                 self.conn_fer, self.addr_fer = self.s.accept()
-                print('fer connect accepted, will use model: {}'.format(fer_model_name))
+                self.add_log('fer connect accepted, will use model: {}'.format(fer_model_name), color='grey')
                 self.load_fer_model()
                 print('fer model loaded')
             if sp == 'stt':
                 stt_model_name = 'VOSK'
                 subprocess.Popen("python speech_to_text.py {} {}".format(self.socket_input.get(), stt_model_name))
                 self.conn_stt, self.addr_stt = self.s.accept()
-                print('stt connect accepted, will use model: {}'.format(stt_model_name))
+                self.add_log('stt connect accepted, will use model: {}'.format(stt_model_name), color='grey')
                 self.load_stt_model()
                 print('stt model loaded')
             if sp == 'camera':
@@ -331,7 +369,8 @@ class Application(Frame):
                 pass
                 # print('Zero subprocess given. Please check name of subprocess and run initial again.')
             # time.sleep(1)
-        print('Initial build successfully')
+        self.add_log('Initial build successfully', color='blue')
+        self.add_log('Please press the button: [Start communication]', color='blue')
 
     def createWidgets(self):
         self.recording_window.grid(row=0, column=0)
@@ -386,6 +425,7 @@ class Application(Frame):
 
         self.STOP["text"] = "stop communication",
         self.STOP["command"] = self.on_stop
+        self.STOP["state"] = DISABLED
         self.STOP.grid(row=10, column=0)
 
         self.NAO_ENABLE["text"] = "nao available",

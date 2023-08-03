@@ -11,11 +11,12 @@ from gui import *
 import sys
 
 nao = True
-nao_IP = '169.254.172.87'
+nao_IP = '169.254.67.196'
+# nao_IP = 'nao.local'
 path_to_nao_audio = 'nao@nao.local:/home/nao/recordings/recording.wav'
 path_to_pc_audio = './recordings/recording.wav'
 path_to_nao_picture = 'nao@nao.local:/home/nao/recordings/cameras'
-path_to_pc_picture = 'D:\GitRepos\COMP66090\cognitive_robot_with_machine_learning\src/recordings/pictures'
+path_to_pc_picture = './recordings/pictures'
 
 
 #

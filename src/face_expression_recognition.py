@@ -19,16 +19,15 @@ def face_region(face_cascade, img):
     try:
         (x, y, w, h) = faces[0]
         cv2.imwrite('./recordings/pictures/tmp_image.jpg', cv2.rectangle(img, (x, y), (x + w, y + h), (0, 255, 0), 2))
-
     except:
-        print('no face region find')
+        print('no face region find, return original image')
         return img
     return img[y:y + h, x:x + w]
 
 
 def self_trained_cnn(face_cascade, model, image):
     # image = cv2.imread(img_path)
-
+    start = time.time()
     image = face_region(face_cascade, image)
 
     image = cv2.resize(image, (48, 48))
@@ -37,7 +36,8 @@ def self_trained_cnn(face_cascade, model, image):
     predict = model.predict(np.array([image]))
     emotion_list = ['anger', 'disgust', 'happy', 'sad', 'surprise', 'neutral']
     predict = emotion_list[np.argmax(predict)]
-
+    end = time.time()
+    print('prediction = {}, time used: {}'.format(predict, end-start))
     return predict
 
 
@@ -78,11 +78,15 @@ def self_trained_cnn_group_test():
 def deep_face(img):
     # img = cv2.imread('./recordings/pictures/happy/image1.jpg')
     # plt.imshow(img[:, :, :: -1])
+    # start = time.time()
     try:
         result = DeepFace.analyze(img, actions=['emotion'])
         prediction = result[0]['dominant_emotion']
     except:
         prediction = 'None'
+    # end = time.time()
+    # print(end-start)
+    # print(prediction)
     return prediction
 
     # x1 = int(result[0]['region']['x'])
@@ -198,7 +202,7 @@ def main(port, model_name):
                     model = keras.models.load_model(model_path, compile=False)
                     model.compile()
                 elif model_selection == 'deepface':
-                    pass
+                    _ = deep_face('./recordings/pictures/trump-2.jpg')
                 elif model_selection == 'fer':
                     detector = FER()
                 else:
@@ -236,12 +240,15 @@ if __name__ == "__main__":
 
 
 
+    # deep_face('./recordings/face_data/jack.jpg')
+
+
     # face_cascade = cv2.CascadeClassifier(cv2.data.haarcascades + 'haarcascade_frontalface_default.xml')
-    # model_path = 'D:\GitRepos\COMP66090\cognitive_robot_with_machine_learning\src/fer_model/flicnn_model.keras'
+    # model_path = './fer_model/flicnn_model.keras'
     # model = keras.models.load_model(model_path, compile=False)
     # model.compile()
     #
-    # img = cv2.imread('./recordings/pictures/tmp_image.jpg')
+    # img = cv2.imread('./recordings/face_data/jack.jpg')
     #
     # predict = self_trained_cnn(face_cascade, model, img)
     # print(predict)
