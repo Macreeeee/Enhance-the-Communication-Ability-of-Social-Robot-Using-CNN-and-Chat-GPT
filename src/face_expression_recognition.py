@@ -164,7 +164,7 @@ def fer_group_test():
 
 def face_recognition(img1_path, img2_path):
     try:
-        result = DeepFace.verify(img1_path=img1_path, img2_path=img2_path, model_name="VGG-Face",
+        result = DeepFace.verify(img1_path=img1_path, img2_path=img2_path, model_name="ArcFace",
                                  distance_metric="cosine")
         print(result['distance'])
         result = result['verified']

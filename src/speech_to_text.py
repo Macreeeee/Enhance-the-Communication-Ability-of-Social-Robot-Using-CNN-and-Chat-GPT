@@ -76,7 +76,7 @@ def run_stt_model(stream, rec):
     start = time.time()
     total = []
     while True:
-        data = stream.read(8192)
+        data = stream.read(4096)
         if len(data) == 0:
             break
         if rec.AcceptWaveform(data):
@@ -102,7 +102,7 @@ def run_stt_model(stream, rec):
     print('speech recognized, time used: {}'.format(end - start))
     stream.close()
     if ' '.join(total) == '':
-        return '.'
+        return '...'
     return ' '.join(total)
 
 

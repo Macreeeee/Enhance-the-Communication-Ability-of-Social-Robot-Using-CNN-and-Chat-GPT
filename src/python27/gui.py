@@ -17,6 +17,20 @@ def wait_until_receive(conn):
     return response
 
 
+def test_function():
+    nao_ip = 'nao.local'
+    nao_port = 9559
+
+    motion_proxy = ALProxy("ALMotion", nao_ip, nao_port)
+    posture_proxy = ALProxy("ALRobotPosture", nao_ip, nao_port)
+
+    posture_proxy.goToPosture("Stand", 1.0)
+
+    motion_proxy.moveTo(-0.3, 0.0, 0, 3)
+
+    motion_proxy.rest()
+
+
 class Application(Frame):
     def __init__(self, master=None):
         Frame.__init__(self, master)
@@ -54,11 +68,12 @@ class Application(Frame):
         self.recording_window = Text(self)
 
         sample_img = ImageTk.PhotoImage(Image.open("recordings/pictures/User_Icon.jpg"))
-        self.picture_window = Label(self, image=sample_img, width=160, height=120)
+        self.picture_window = Label(self, image=sample_img, width=320, height=240)
         self.picture_window.img = sample_img
 
         self.emotion_label = Label(self)
         self.user_name_label = Label(self)
+        self.pack()
 
         self.audio_thread = threading.Thread(target=self.audio_thread_function,
                                              args=(self.nao_ip.get(), self.nao_port.get()))
@@ -68,7 +83,69 @@ class Application(Frame):
 
         self.createWidgets()
 
-        self.pack()
+    def createWidgets(self):
+        self.recording_window.grid(row=0, column=0)
+        self.read_recording()
+        self.log_window.grid(row=0, column=2)
+        self.picture_window.grid(row=0, column=1)
+
+        self.add_log("Welcome to NAO's communication manager.", color='blue')
+        self.add_log("Press 'initial build' for initialization. \nPress 'start "
+                     "communication for start communication. \nNote: you must do initial building before start "
+                     "communication. ", True, 'grey')
+        self.log_window.tag_config("grey", foreground="black")
+        self.log_window.tag_config("grey", foreground="grey")
+        self.log_window.tag_config("red", foreground="red")
+        self.log_window.tag_config("blue", foreground="blue")
+        # self.log_window.tag_add("blue", "1.0", "1.0 lineend")
+        # self.log_window.tag_add("grey", "2.0", "3.0 lineend")
+        # self.log_window.tag_add("red", "4.0", "4.5")
+        # self.log_window.tag_add("grey", "2.0", "3.0 lineend")
+
+        self.QUIT["text"] = "QUIT"
+        self.QUIT["fg"] = "red"
+        self.QUIT["command"] = self.on_quit
+        self.QUIT.grid(row=20, column=0)
+
+        self.CLEAR_LOG["text"] = "clear recording",
+        self.CLEAR_LOG["command"] = self.clear_recording
+        self.CLEAR_LOG.grid(row=2, column=0)
+
+        self.socket_input_label.grid(row=5, column=0)
+        self.socket_input.grid(row=5, column=1)
+
+        self.nao_ip_label.grid(row=3, column=0)
+        self.nao_ip.grid(row=3, column=1)
+
+        self.nao_port_label.grid(row=4, column=0)
+        self.nao_port.grid(row=4, column=1)
+
+        self.emotion_label['text'] = 'no emotion detected'
+        self.emotion_label.grid(row=1, column=1)
+
+        self.user_name_label['text'] = '?'
+        self.user_name_label.grid(row=2, column=1)
+
+        self.INITIAL["text"] = "initial build",
+        self.INITIAL["command"] = self.run_initial_build
+        self.INITIAL.grid(row=8, column=0)
+
+        self.START["text"] = "start communication",
+        self.START["command"] = self.on_start
+        self.START.grid(row=9, column=0)
+
+        self.STOP["text"] = "stop communication",
+        self.STOP["command"] = self.on_stop
+        self.STOP["state"] = DISABLED
+        self.STOP.grid(row=10, column=0)
+
+        self.NAO_ENABLE["text"] = "nao available",
+        self.NAO_ENABLE["variable"] = self.nao
+        self.NAO_ENABLE.grid(row=11, column=0)
+
+        self.TEST["text"] = "test",
+        self.TEST["command"] = self.nao_motion_thread_function
+        self.TEST.grid(row=12, column=0)
 
     def start_task(self, time, command):
         self.after(time, command)
@@ -141,8 +218,8 @@ class Application(Frame):
     def audio_thread_function(self, nao_ip, nao_port):
         if self.nao.get():
             try:
-                IP = self.nao_ip.get()
-                PORT = int(self.nao_port.get())
+                # IP = self.nao_ip.get()
+                # PORT = int(self.nao_port.get())
                 audioRecorderProxy = ALProxy("ALAudioRecorder", nao_ip, nao_port)
                 textToSpeechProxy = ALProxy("ALTextToSpeech", nao_ip, nao_port)
                 audioDeviceProxy = ALProxy("ALAudioDevice", nao_ip, nao_port)
@@ -169,7 +246,10 @@ class Application(Frame):
                 print('NAO: ' + response)
                 add_new_content('assistant', response)
                 self.read_recording()
+                motion_thread = threading.Thread(target=self.nao_motion_thread_function)
+                motion_thread.start()
                 textToSpeechProxy.say(response)
+                motion_thread.join()
         else:
             while not self.stopping:
                 self.conn_stt.sendall('run_stt_model_pc'.encode())
@@ -192,13 +272,17 @@ class Application(Frame):
         # self.emotion_label['text'] = prediction
         # self.emotion_label.update()
 
+    def update_emotion_label(self, prediction):
+        self.emotion_label['text'] = prediction
+        self.emotion_label.update()
+
     def video_thread_function(self, nao_ip, nao_port):
         if self.nao.get():
             try:
                 # IP = self.nao_ip.get()
                 # PORT = int(self.nao_port.get())
                 photoCaptureProxy = ALProxy("ALPhotoCapture", nao_ip, nao_port)
-                photoCaptureProxy.setResolution(0)
+                photoCaptureProxy.setResolution(1)
                 photoCaptureProxy.setPictureFormat("jpg")
                 photoCaptureProxy.setColorSpace(13)
             except RuntimeError:
@@ -206,16 +290,17 @@ class Application(Frame):
                 self.add_log('Video thread can not connect to tcp://{}:{}'.format(nao_ip, nao_port), color='red')
                 return
             while not self.stopping:
-            # for i in range(3):
-            #     start = time.time()
+                # for i in range(3):
+                #     start = time.time()
                 self.take_and_send_picture(photoCaptureProxy, self.conn_fer)
                 # threading.Thread(target=self.take_and_send_picture, args=(photoCaptureProxy, self.conn_fer)).start()
                 prediction = wait_until_receive(self.conn_fer)
                 self.refresh_picture()
-                time.sleep(0.5)
+                # time.sleep(0.5)
                 # end = time.time()
                 # print(end - start)
-                print('@@@@@@@@:{}'.format(prediction))
+                print('PREDICTION EMOTION:{}'.format(prediction))
+                self.after(0, lambda: self.update_emotion_label(prediction))
                 # self.emotion_label['text'] = prediction
                 # self.emotion_label.update()
 
@@ -232,25 +317,25 @@ class Application(Frame):
                     self.emotion_label.update()
         self.add_log('Video thread ended', color='blue')
 
-    def face_recognition_thread_function(self):
+    def face_recognition_thread_function(self, nao_ip, nao_port):
         if not self.nao.get():
             print('Pass face recognition step')
             self.add_log('Pass face recognition step')
             return
         try:
-            IP = self.nao_ip.get()
-            PORT = int(self.nao_port.get())
-            audioRecorderProxy = ALProxy("ALAudioRecorder", IP, PORT)
-            textToSpeechProxy = ALProxy("ALTextToSpeech", IP, PORT)
-            audioDeviceProxy = ALProxy("ALAudioDevice", IP, PORT)
-            photoCaptureProxy = ALProxy("ALPhotoCapture", IP, PORT)
+            # IP = self.nao_ip.get()
+            # PORT = int(self.nao_port.get())
+            audioRecorderProxy = ALProxy("ALAudioRecorder", nao_ip, nao_port)
+            textToSpeechProxy = ALProxy("ALTextToSpeech", nao_ip, nao_port)
+            audioDeviceProxy = ALProxy("ALAudioDevice", nao_ip, nao_port)
+            photoCaptureProxy = ALProxy("ALPhotoCapture", nao_ip, nao_port)
             photoCaptureProxy.setResolution(0)
             photoCaptureProxy.setPictureFormat("jpg")
             photoCaptureProxy.setColorSpace(13)
             photoCaptureProxy.takePictures(1, "/home/nao/recordings/cameras/", "image")
         except RuntimeError:
-            print('Cannot connect to tcp://{}'.format(IP))
-            self.add_log('Cannot connect to tcp://{}'.format(IP))
+            print('Cannot connect to tcp://{}'.format(nao_ip))
+            self.add_log('Cannot connect to tcp://{}'.format(nao_ip))
             return
 
         file_transfer(path_to_nao_picture + '/image.jpg', path_to_pc_picture + '/tmp_image.jpg')
@@ -281,7 +366,34 @@ class Application(Frame):
         self.user_name_label['text'] = name
         # self.user_name_label.update()
 
+    def run_motion(self, nao_ip, nao_port, motions):
+        print('run motion')
+        motion_code = """
+import naoqi
+
+motion_proxy = ALProxy("ALMotion", '{}', {})
+posture_proxy = ALProxy("ALRobotPosture", '{}', {})
+""".format(nao_ip,nao_port,nao_ip,nao_port)
+
+        for m in motions:
+            motion_code += m + '\n'
+
+        print(motion_code)
+        exec(motion_code)
+
+    def nao_motion_thread_function(self):
+        print('motion thread start')
+        nao_ip = self.nao_ip.get()
+        nao_port = int(self.nao_port.get())
+        motions = call_gpt_for_instruction()[:-2].split('/')
+        print(motions)
+        subthread = threading.Thread(target=self.run_motion, args=(nao_ip, nao_port, motions))
+        subthread.start()
+        subthread.join()
+
+
     def on_start(self):
+        initial_communication_background()
         print('start communication')
         self.START.config(state=DISABLED)
         self.STOP['state'] = NORMAL
@@ -291,23 +403,29 @@ class Application(Frame):
         nao_port = int(self.nao_port.get())
         self.add_log('Connect to NAO with tcp://{}:{}'.format(nao_ip, nao_port))
         # print('start face recognition thread')
-        # self.face_recognition_thread.start()
+        # self.face_recognition_thread = threading.Thread(target=self.face_recognition_thread_function, args=(nao_ip, nao_port)).start()
         # while self.face_recognition_thread.is_alive():
         #     pass
         print('start audio thread')
-        self.audio_thread = threading.Thread(target=self.audio_thread_function, args=(nao_ip, nao_port)).start()
-        print('start video thread')
-        self.video_thread = threading.Thread(target=self.video_thread_function, args=(nao_ip, nao_port)).start()
+        self.audio_thread = threading.Thread(target=self.audio_thread_function, args=(nao_ip, nao_port))
+        self.audio_thread.start()
+        # print('start video thread')
+        # self.video_thread = threading.Thread(target=self.video_thread_function, args=(nao_ip, nao_port))
+        # self.video_thread.start()
 
     def on_stop(self):
         self.add_log('\nTrying to end communication, please wait...', color='grey')
         if not self.stopping:
             self.stopping = True
             self.STOP['state'] = DISABLED
-            while not self.audio_thread.is_alive() and not self.video_thread.is_alive():
-                self.stopping = False
-                self.STOP['state'] = DISABLED
-                self.START['state'] = NORMAL
+            self.audio_thread.join()  # Wait for audio_thread to complete
+            self.video_thread.join()
+            # while not self.audio_thread.is_alive() and not self.video_thread.is_alive():
+            self.stopping = False
+            self.STOP['state'] = DISABLED
+            self.START['state'] = NORMAL
+            self.add_log('Communication stopped. You can restart it or quit this application.', color='blue',
+                         empty_line=True)
 
     def on_quit(self):
         self.add_log('\nQuit application, please wait...', color='blue')
@@ -371,70 +489,6 @@ class Application(Frame):
             # time.sleep(1)
         self.add_log('Initial build successfully', color='blue')
         self.add_log('Please press the button: [Start communication]', color='blue')
-
-    def createWidgets(self):
-        self.recording_window.grid(row=0, column=0)
-        self.read_recording()
-        self.log_window.grid(row=0, column=2)
-        self.picture_window.grid(row=0, column=1)
-
-        self.add_log("Welcome to NAO's communication manager.", color='blue')
-        self.add_log("Press 'initial build' for initialization. \nPress 'start "
-                     "communication for start communication. \nNote: you must do initial building before start "
-                     "communication. ", True, 'grey')
-        self.log_window.tag_config("grey", foreground="black")
-        self.log_window.tag_config("grey", foreground="grey")
-        self.log_window.tag_config("red", foreground="red")
-        self.log_window.tag_config("blue", foreground="blue")
-        # self.log_window.tag_add("blue", "1.0", "1.0 lineend")
-        # self.log_window.tag_add("grey", "2.0", "3.0 lineend")
-        # self.log_window.tag_add("red", "4.0", "4.5")
-        # self.log_window.tag_add("grey", "2.0", "3.0 lineend")
-
-        self.QUIT["text"] = "QUIT"
-        self.QUIT["fg"] = "red"
-        self.QUIT["command"] = self.on_quit
-        self.QUIT.grid(row=20, column=0)
-
-        self.CLEAR_LOG["text"] = "clear recording",
-        self.CLEAR_LOG["command"] = self.clear_recording
-        self.CLEAR_LOG.grid(row=2, column=0)
-
-        self.socket_input_label.grid(row=5, column=0)
-        self.socket_input.grid(row=5, column=1)
-
-        self.nao_ip_label.grid(row=3, column=0)
-        self.nao_ip.grid(row=3, column=1)
-
-        self.nao_port_label.grid(row=4, column=0)
-        self.nao_port.grid(row=4, column=1)
-
-        self.emotion_label['text'] = 'None emotion'
-        self.emotion_label.grid(row=1, column=1)
-
-        self.user_name_label['text'] = 'None name'
-        self.user_name_label.grid(row=2, column=1)
-
-        self.INITIAL["text"] = "initial build",
-        self.INITIAL["command"] = self.run_initial_build
-        self.INITIAL.grid(row=8, column=0)
-
-        self.START["text"] = "start communication",
-        self.START["command"] = self.on_start
-        self.START.grid(row=9, column=0)
-
-        self.STOP["text"] = "stop communication",
-        self.STOP["command"] = self.on_stop
-        self.STOP["state"] = DISABLED
-        self.STOP.grid(row=10, column=0)
-
-        self.NAO_ENABLE["text"] = "nao available",
-        self.NAO_ENABLE["variable"] = self.nao
-        self.NAO_ENABLE.grid(row=11, column=0)
-
-        self.TEST["text"] = "test",
-        self.TEST["command"] = self.refresh_picture
-        self.TEST.grid(row=12, column=0)
 
 
 if __name__ == '__main__':

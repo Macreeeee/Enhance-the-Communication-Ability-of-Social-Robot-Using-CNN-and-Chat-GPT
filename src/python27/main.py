@@ -11,7 +11,7 @@ from gui import *
 import sys
 
 nao = True
-nao_IP = '169.254.67.196'
+nao_IP = '169.254.254.164'
 # nao_IP = 'nao.local'
 path_to_nao_audio = 'nao@nao.local:/home/nao/recordings/recording.wav'
 path_to_pc_audio = './recordings/recording.wav'
@@ -31,6 +31,13 @@ path_to_pc_picture = './recordings/pictures'
 def call_gpt():
     command = "python chat.py"
     output = subprocess.check_output(command, shell=True)
+    return output
+
+
+def call_gpt_for_instruction():
+    command_instruction = "python generate_chatgpt_instruction.py"
+    output = subprocess.check_output(command_instruction, shell=True)
+    print('GPT INSTRUCTION: '+ output)
     return output
 
 
@@ -84,7 +91,7 @@ def wait_until_receive(conn):
 # Initially create or re-write communication recording.json with basic chat-GPT content.
 # Initially create or re-write communication recording.txt with time.
 def initial_communication_background():
-    content = "Your name is NAO, you are a robot. Today is Sunday."
+    content = "Your name is NAO, you are a physical robot, instead of a virtual AI. You have phisical ability to stand up, sit down and walk and do many other motions. You task is communication with me. You should respond me directly without 'NAO:'."
     communication = [{"role": "system", "content": content}]
 
     json_dict = dict()
