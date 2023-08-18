@@ -2,7 +2,7 @@ import openai
 import sys
 import json
 
-openai.api_key = "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"
+openai.api_key = sys.argv[1]
 
 role_text = "You are a excellent instruction interpreter assistant named NAO. Your task is to understand a " \
             "conversation, " \
@@ -39,6 +39,8 @@ example_list = {"example 1": [
 }
 
 output_format = "your output format should use slash symbol to saperat each motion:'motion one/motion two/motion three', the arguments used like x, y can be changed by you with any unmber."
+
+current_state = "You current state is: stand"
 
 log = json.load(open("./recordings/communication_recording.json", "r"))['log']
 last_communication = log[-2:]

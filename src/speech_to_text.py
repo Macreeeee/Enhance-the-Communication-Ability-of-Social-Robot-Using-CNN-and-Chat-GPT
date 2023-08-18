@@ -106,6 +106,13 @@ def run_stt_model(stream, rec):
     return ' '.join(total)
 
 
+def run_vosk_with_single_file(path):
+    rec = load_stt_model()
+    stream = open(path, "rb")
+    text = run_stt_model(stream, rec)
+    print(text)
+
+
 def main(socket_enable=True):
     if not socket_enable:  # for testing sub functions
         rec = load_stt_model()
@@ -145,4 +152,6 @@ def main(socket_enable=True):
 
 
 if __name__ == '__main__':
+    # run_vosk_with_single_file('recordings/recording.wav')
+    # exit()
     main()

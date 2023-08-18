@@ -37,7 +37,7 @@ def self_trained_cnn(face_cascade, model, image):
     emotion_list = ['anger', 'disgust', 'happy', 'sad', 'surprise', 'neutral']
     predict = emotion_list[np.argmax(predict)]
     end = time.time()
-    print('prediction = {}, time used: {}'.format(predict, end-start))
+    print('prediction = {}, time used: {}'.format(predict, end - start))
     return predict
 
 
@@ -98,32 +98,33 @@ def deep_face(img):
 
 
 def deep_face_group_test():
-    # face_cascade = cv2.CascadeClassifier(cv2.data.haarcascades + 'haarcascade_frontalface_default.xml')
+    face_cascade = cv2.CascadeClassifier(cv2.data.haarcascades + 'haarcascade_frontalface_default.xml')
     # emotion_list = ['happy']
     emotion_folder_list = ['anger', 'disgust', 'happy', 'sad', 'surprise', 'neutral']
     emotion_list = ['angry', 'disgust', 'happy', 'sad', 'surprise', 'neutral']
-    map = {'angry': False, 'disgust': False, 'happy': True, 'sad': False, 'surprise': True, 'neutral': True}
+    map = {'angry': False, 'anger': False, 'disgust': False, 'happy': True, 'sad': False, 'surprise': True,
+           'neutral': True, 'fear': -1}
     count = 0
     total = 0
     for e in range(len(emotion_folder_list)):
         for i in range(30):
             total += 1
             img = cv2.imread('./recordings/pictures/{}/image{}.jpg'.format(emotion_folder_list[e], str(i)))
-            # img = face_region(face_cascade, img)
+            img = face_region(face_cascade, img)
             try:
-                result = DeepFace.analyze(img, actions=['emotion'])
+                result = DeepFace.analyze(img, actions=['emotion'], enforce_detection=False)
                 prediction = result[0]['dominant_emotion']
             except:
                 prediction = 'None'
                 total -= 1
             print('true: {}, pre: {}'.format(emotion_folder_list[e], prediction))
-            # if map[prediction] == map[e]:
-            if prediction == emotion_list[e]:
+            if map[prediction] == map[emotion_folder_list[e]]:
+                # if prediction == emotion_list[e]:
                 count += 1
     print(count / total)
 
 
-def run_fer(img):
+def run_fer(detector, img):
     try:
         result = detector.detect_emotions(img)
         d = result[0]['emotions']
@@ -138,6 +139,8 @@ def fer_group_test():
     # emotion_list = ['anger']
     emotion_folder_list = ['anger', 'disgust', 'happy', 'sad', 'surprise', 'neutral']
     emotion_list = ['angry', 'disgust', 'happy', 'sad', 'surprise', 'neutral']
+    map = {'angry': False, 'anger': False, 'disgust': False, 'happy': True, 'sad': False, 'surprise': True,
+           'neutral': True, 'fear': -1, 'none': -1}
     count = 0
     total = 0
     detector = FER()
@@ -157,7 +160,8 @@ def fer_group_test():
                 total -= 1
 
             print('true: {}, pre: {}'.format(emotion_folder_list[e], prediction))
-            if prediction == emotion_list[e]:
+            if map[prediction] == map[emotion_folder_list[e]]:
+                # if prediction == emotion_list[e]:
                 count += 1
     print(count / total)
 
@@ -183,6 +187,7 @@ def recognition_from_data(img_path, directory):
             if result:
                 return filename[:-4]
     return '?'
+
 
 def main(port, model_name):
     model_selection_candidate = ['Fill_CNN', 'deepface', 'fer']
@@ -217,7 +222,7 @@ def main(port, model_name):
             elif model_selection == 'deepface':
                 predict = deep_face(img)
             elif model_selection == 'fer':
-                predict = run_fer(img)
+                predict = run_fer(detector, img)
             else:
                 predict = deep_face(img)
             # print(predict)
@@ -226,6 +231,7 @@ def main(port, model_name):
         if response == 'face_recognition':
             name = recognition_from_data('./recordings/pictures/tmp_image.jpg', 'recordings/face_data')
             s.sendall(name.encode())
+
 
 if __name__ == "__main__":
     # start = time.time()
@@ -236,12 +242,10 @@ if __name__ == "__main__":
     # face_region()
     # end = time.time()
     # print('Total Time used: {}'.format(end - start))
+    # exit()
     main(int(sys.argv[1]), sys.argv[2])
 
-
-
     # deep_face('./recordings/face_data/jack.jpg')
-
 
     # face_cascade = cv2.CascadeClassifier(cv2.data.haarcascades + 'haarcascade_frontalface_default.xml')
     # model_path = './fer_model/flicnn_model.keras'

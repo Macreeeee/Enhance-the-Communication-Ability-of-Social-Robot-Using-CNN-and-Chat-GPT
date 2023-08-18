@@ -11,7 +11,7 @@ from gui import *
 import sys
 
 nao = True
-nao_IP = '169.254.254.164'
+nao_IP = 'nao.local'
 # nao_IP = 'nao.local'
 path_to_nao_audio = 'nao@nao.local:/home/nao/recordings/recording.wav'
 path_to_pc_audio = './recordings/recording.wav'
@@ -28,14 +28,14 @@ path_to_pc_picture = './recordings/pictures'
 #     conn, addr = s.accept()
 
 # Call chat gpt through recorded json file.
-def call_gpt():
-    command = "python chat.py"
+def call_gpt(api_key):
+    command = "python chat.py {}".format(api_key)
     output = subprocess.check_output(command, shell=True)
     return output
 
 
-def call_gpt_for_instruction():
-    command_instruction = "python generate_chatgpt_instruction.py"
+def call_gpt_for_instruction(api_key):
+    command_instruction = "python generate_chatgpt_instruction.py {}".format(api_key)
     output = subprocess.check_output(command_instruction, shell=True)
     print('GPT INSTRUCTION: '+ output)
     return output

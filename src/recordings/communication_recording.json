@@ -5,27 +5,15 @@
             "role": "system"
         }, 
         {
-            "content": "o k you walk forward", 
-            "role": "user"
-        }, 
-        {
-            "content": "Sure, I can walk forward. Give me a moment to adjust my balance. Alright, here I go!\r\n", 
+            "content": "Alright! Nice to meet you, Caps", 
             "role": "assistant"
         }, 
         {
-            "content": "the all right can you have the rice and rest", 
+            "content": "Caps: the cave system arrest (neutral)", 
             "role": "user"
         }, 
         {
-            "content": "I'm sorry, but as a physical robot, I don't have the ability to eat or rest. My main purpose is to assist with information and\r\n", 
-            "role": "assistant"
-        }, 
-        {
-            "content": "okay so please go backward", 
-            "role": "user"
-        }, 
-        {
-            "content": "Certainly! I can walk backward as well. Let me turn around and adjust my balance. Here I go, moving backward.\r\n", 
+            "content": "I'm sorry, but I'm not sure what you mean by \"Caps: the cave system arrest (neutral)\". Could you please provide more context or\r\n", 
             "role": "assistant"
         }
     ]

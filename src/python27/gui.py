@@ -24,9 +24,9 @@ def test_function():
     motion_proxy = ALProxy("ALMotion", nao_ip, nao_port)
     posture_proxy = ALProxy("ALRobotPosture", nao_ip, nao_port)
 
-    posture_proxy.goToPosture("Stand", 1.0)
-
-    motion_proxy.moveTo(-0.3, 0.0, 0, 3)
+    # posture_proxy.goToPosture("Stand", 1.0)
+    #
+    # motion_proxy.moveTo(-0.3, 0.0, 0, 3)
 
     motion_proxy.rest()
 
@@ -34,6 +34,8 @@ def test_function():
 class Application(Frame):
     def __init__(self, master=None):
         Frame.__init__(self, master)
+
+        self.Border = Frame(self, relief='flat', borderwidth=20)
 
         self.recording_file = open(
             'recordings/communication_recording.txt',
@@ -64,16 +66,23 @@ class Application(Frame):
         self.socket_input = Entry(self)
         self.socket_input.insert(0, '5000')
 
-        self.log_window = Text(self)
-        self.recording_window = Text(self)
+        self.openaikey_input_label = Label(self, text="OpenAI API key:")
+        self.openaikey_input = Entry(self)
+        self.openaikey_input.insert(0, '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')
 
-        sample_img = ImageTk.PhotoImage(Image.open("recordings/pictures/User_Icon.jpg"))
-        self.picture_window = Label(self, image=sample_img, width=320, height=240)
+        self.log_window = Text(self, width=90, height=10)
+        self.recording_window = Text(self, width=70, height=15)
+
+        w = 160
+        h = 120
+        sample_img = ImageTk.PhotoImage(Image.open("recordings/pictures/User_Icon.jpg").resize((w, h), Image.ANTIALIAS))
+        self.picture_window = Label(self, image=sample_img, width=w, height=h)
         self.picture_window.img = sample_img
 
+        self.emotion_list = []
         self.emotion_label = Label(self)
         self.user_name_label = Label(self)
-        self.pack()
+        self.pack(fill='both', expand=True, padx=10, pady=10)
 
         self.audio_thread = threading.Thread(target=self.audio_thread_function,
                                              args=(self.nao_ip.get(), self.nao_port.get()))
@@ -84,10 +93,10 @@ class Application(Frame):
         self.createWidgets()
 
     def createWidgets(self):
-        self.recording_window.grid(row=0, column=0)
+        self.recording_window.grid(row=0, column=5, rowspan=5, columnspan=4)
         self.read_recording()
-        self.log_window.grid(row=0, column=2)
-        self.picture_window.grid(row=0, column=1)
+        self.log_window.grid(row=6, column=4, rowspan=4, columnspan=7)
+        self.picture_window.grid(row=0, column=3, rowspan=4, columnspan=2)
 
         self.add_log("Welcome to NAO's communication manager.", color='blue')
         self.add_log("Press 'initial build' for initialization. \nPress 'start "
@@ -102,50 +111,53 @@ class Application(Frame):
         # self.log_window.tag_add("red", "4.0", "4.5")
         # self.log_window.tag_add("grey", "2.0", "3.0 lineend")
 
-        self.QUIT["text"] = "QUIT"
-        self.QUIT["fg"] = "red"
-        self.QUIT["command"] = self.on_quit
-        self.QUIT.grid(row=20, column=0)
+        self.socket_input_label.grid(row=0, column=0)
+        self.socket_input.grid(row=0, column=1, columnspan=2)
 
-        self.CLEAR_LOG["text"] = "clear recording",
-        self.CLEAR_LOG["command"] = self.clear_recording
-        self.CLEAR_LOG.grid(row=2, column=0)
+        self.nao_ip_label.grid(row=1, column=0)
+        self.nao_ip.grid(row=1, column=1, columnspan=2)
 
-        self.socket_input_label.grid(row=5, column=0)
-        self.socket_input.grid(row=5, column=1)
+        self.nao_port_label.grid(row=2, column=0)
+        self.nao_port.grid(row=2, column=1, columnspan=2)
 
-        self.nao_ip_label.grid(row=3, column=0)
-        self.nao_ip.grid(row=3, column=1)
+        self.openaikey_input_label.grid(row=3, column=0)
+        self.openaikey_input.grid(row=3, column=1, columnspan=2)
 
-        self.nao_port_label.grid(row=4, column=0)
-        self.nao_port.grid(row=4, column=1)
+        self.NAO_ENABLE["text"] = "nao available",
+        self.NAO_ENABLE["variable"] = self.nao
+        self.NAO_ENABLE.grid(row=4, column=0, columnspan=3)
 
-        self.emotion_label['text'] = 'no emotion detected'
-        self.emotion_label.grid(row=1, column=1)
-
-        self.user_name_label['text'] = '?'
-        self.user_name_label.grid(row=2, column=1)
-
-        self.INITIAL["text"] = "initial build",
+        self.INITIAL["text"] = "initial_build",
         self.INITIAL["command"] = self.run_initial_build
-        self.INITIAL.grid(row=8, column=0)
+        self.INITIAL.grid(row=5, column=0, columnspan=3)
 
         self.START["text"] = "start communication",
         self.START["command"] = self.on_start
-        self.START.grid(row=9, column=0)
+        self.START.grid(row=6, column=0, columnspan=3)
 
         self.STOP["text"] = "stop communication",
         self.STOP["command"] = self.on_stop
         self.STOP["state"] = DISABLED
-        self.STOP.grid(row=10, column=0)
+        self.STOP.grid(row=7, column=0, columnspan=3)
 
-        self.NAO_ENABLE["text"] = "nao available",
-        self.NAO_ENABLE["variable"] = self.nao
-        self.NAO_ENABLE.grid(row=11, column=0)
+        self.CLEAR_LOG["text"] = "clear recording",
+        self.CLEAR_LOG["command"] = self.clear_recording
+        self.CLEAR_LOG.grid(row=8, column=0, columnspan=3)
 
-        self.TEST["text"] = "test",
-        self.TEST["command"] = self.nao_motion_thread_function
-        self.TEST.grid(row=12, column=0)
+        self.QUIT["text"] = "QUIT"
+        self.QUIT["fg"] = "red"
+        self.QUIT["command"] = self.on_quit
+        self.QUIT.grid(row=9, column=0, columnspan=3)
+
+        self.emotion_label['text'] = 'no emotion detected'
+        self.emotion_label.grid(row=5, column=3, columnspan=2)
+
+        self.user_name_label['text'] = '?'
+        self.user_name_label.grid(row=4, column=3, columnspan=2)
+
+        # self.TEST["text"] = "test",
+        # self.TEST["command"] = self.nao_motion_thread_function
+        # self.TEST.grid(row=12, column=0)
 
     def start_task(self, time, command):
         self.after(time, command)
@@ -203,6 +215,7 @@ class Application(Frame):
             self.log_window.insert(END, '\n' + log, color)
         else:
             self.log_window.insert(END, log, color)
+        self.log_window.see(END)
         self.log_window.update()
 
     def clear_recording(self):
@@ -240,9 +253,14 @@ class Application(Frame):
                 file_transfer(path_to_nao_audio, path_to_pc_audio)
                 self.conn_stt.sendall('run_stt_model'.encode())
                 text = wait_until_receive(self.conn_stt)
+
+                average_emotion = max(set(self.emotion_list), key=self.emotion_list.count)
+                self.emotion_list = []
+
+                text += " ({})".format(average_emotion)
                 add_new_content('user', text, self.user_name_label['text'])
                 self.read_recording()
-                response = call_gpt()
+                response = call_gpt(self.openaikey_input.get())
                 print('NAO: ' + response)
                 add_new_content('assistant', response)
                 self.read_recording()
@@ -256,7 +274,7 @@ class Application(Frame):
                 text = wait_until_receive(self.conn_stt)
                 add_new_content('user', text, self.user_name_label['text'])
                 self.read_recording()
-                response = call_gpt()
+                response = call_gpt(self.openaikey_input.get())
                 print('NAO: ' + response)
                 add_new_content('assistant', response)
                 self.read_recording()
@@ -295,6 +313,7 @@ class Application(Frame):
                 self.take_and_send_picture(photoCaptureProxy, self.conn_fer)
                 # threading.Thread(target=self.take_and_send_picture, args=(photoCaptureProxy, self.conn_fer)).start()
                 prediction = wait_until_receive(self.conn_fer)
+                self.emotion_list.append(prediction)
                 self.refresh_picture()
                 # time.sleep(0.5)
                 # end = time.time()
@@ -303,8 +322,6 @@ class Application(Frame):
                 self.after(0, lambda: self.update_emotion_label(prediction))
                 # self.emotion_label['text'] = prediction
                 # self.emotion_label.update()
-
-
         else:
             while not self.stopping:
                 self.conn_stt.sendall('take_picture'.encode())
@@ -355,11 +372,15 @@ class Application(Frame):
             text = wait_until_receive(self.conn_stt)
             if text == '.':
                 text = 'No-Name'
-            text = text.split(' ')[-1]
+            text = text.split(' ')[-1].capitalize()
+            add_new_content('assistant', 'Alright! Nice to meet you, {}'.format(text))
+            self.read_recording()
             textToSpeechProxy.say('Alright! Nice to meet you, {}'.format(text))
             shutil.move('recordings/pictures/tmp_image.jpg', 'recordings/face_data/{}.jpg'.format(text))
             name = text
         else:
+            add_new_content('assistant', 'Hi, {}, meet you again'.format(response))
+            self.read_recording()
             textToSpeechProxy.say('Hi, {}, meet you again'.format(response))
             name = response
         print('face recognition finished')
@@ -373,7 +394,7 @@ import naoqi
 
 motion_proxy = ALProxy("ALMotion", '{}', {})
 posture_proxy = ALProxy("ALRobotPosture", '{}', {})
-""".format(nao_ip,nao_port,nao_ip,nao_port)
+""".format(nao_ip, nao_port, nao_ip, nao_port)
 
         for m in motions:
             motion_code += m + '\n'
@@ -385,12 +406,11 @@ posture_proxy = ALProxy("ALRobotPosture", '{}', {})
         print('motion thread start')
         nao_ip = self.nao_ip.get()
         nao_port = int(self.nao_port.get())
-        motions = call_gpt_for_instruction()[:-2].split('/')
+        motions = call_gpt_for_instruction(self.openaikey_input.get())[:-2].split('/')
         print(motions)
         subthread = threading.Thread(target=self.run_motion, args=(nao_ip, nao_port, motions))
         subthread.start()
         subthread.join()
-
 
     def on_start(self):
         initial_communication_background()
@@ -401,17 +421,23 @@ posture_proxy = ALProxy("ALRobotPosture", '{}', {})
         self.add_log('NAO enable: {}'.format(self.nao.get()), color='blue')
         nao_ip = self.nao_ip.get()
         nao_port = int(self.nao_port.get())
-        self.add_log('Connect to NAO with tcp://{}:{}'.format(nao_ip, nao_port))
-        # print('start face recognition thread')
-        # self.face_recognition_thread = threading.Thread(target=self.face_recognition_thread_function, args=(nao_ip, nao_port)).start()
-        # while self.face_recognition_thread.is_alive():
-        #     pass
+        if self.nao.get():
+            self.add_log('Connect to NAO with tcp://{}:{}'.format(nao_ip, nao_port), color='grey')
+        else:
+            self.add_log('Nao disabled.', color='grey')
+
+        print('start face recognition thread')
+        self.face_recognition_thread = threading.Thread(target=self.face_recognition_thread_function, args=(nao_ip, nao_port))
+        self.face_recognition_thread.start()
+        self.face_recognition_thread.join()
+
         print('start audio thread')
         self.audio_thread = threading.Thread(target=self.audio_thread_function, args=(nao_ip, nao_port))
         self.audio_thread.start()
-        # print('start video thread')
-        # self.video_thread = threading.Thread(target=self.video_thread_function, args=(nao_ip, nao_port))
-        # self.video_thread.start()
+
+        print('start video thread')
+        self.video_thread = threading.Thread(target=self.video_thread_function, args=(nao_ip, nao_port))
+        self.video_thread.start()
 
     def on_stop(self):
         self.add_log('\nTrying to end communication, please wait...', color='grey')
@@ -433,7 +459,7 @@ posture_proxy = ALProxy("ALRobotPosture", '{}', {})
             response = "quit"
             self.conn_fer.sendall(response.encode())
             self.conn_stt.sendall(response.encode())
-            self.conn_cam.sendall(response.encode())
+            # self.conn_cam.sendall(response.encode())
             time.sleep(1)
             self.s.close()
             self.quit()
@@ -463,7 +489,7 @@ posture_proxy = ALProxy("ALRobotPosture", '{}', {})
 
         for sp in subprocesses:
             if sp == 'fer':
-                fer_model_name = 'deepface'
+                fer_model_name = 'fer'
                 subprocess.Popen(
                     "python face_expression_recognition.py {} {}".format(self.socket_input.get(), fer_model_name))
                 self.conn_fer, self.addr_fer = self.s.accept()

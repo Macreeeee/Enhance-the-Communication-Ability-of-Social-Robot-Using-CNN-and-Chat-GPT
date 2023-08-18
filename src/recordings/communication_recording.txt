@@ -124,3 +124,121 @@ Recording Date: 2023-08-04 15:58:07
 
 2023-08-04 15:59:06  user: okay so please go backward
 2023-08-04 15:59:09  assistant: Certainly! I can walk backward as well. Let me turn around and adjust my balance. Here I go, moving backward.
+===================================
+Recording Date: 2023-08-17 14:50:14
+===================================
+Recording Date: 2023-08-17 14:54:46
+===================================
+Recording Date: 2023-08-17 14:55:58
+===================================
+Recording Date: 2023-08-17 15:00:05
+===================================
+Recording Date: 2023-08-18 14:52:58
+===================================
+Recording Date: 2023-08-18 14:53:38
+===================================
+Recording Date: 2023-08-18 14:54:10
+===================================
+Recording Date: 2023-08-18 14:58:10
+===================================
+Recording Date: 2023-08-18 14:58:48
+===================================
+Recording Date: 2023-08-18 14:59:43
+===================================
+Recording Date: 2023-08-18 15:40:04
+===================================
+Recording Date: 2023-08-18 15:43:54
+===================================
+Recording Date: 2023-08-18 15:46:58
+===================================
+Recording Date: 2023-08-18 15:55:29
+===================================
+Recording Date: 2023-08-18 16:00:52
+
+2023-08-18 16:01:20  user: Coast: ah hello can you stand up (neutral)===================================
+Recording Date: 2023-08-18 16:04:00
+
+2023-08-18 16:04:39  user: jack: can't stand up (neutral)
+2023-08-18 16:04:42  assistant: I'm sorry to hear that you are having difficulty standing up, Jack. Is there something specific that is preventing you from standing?
+
+2023-08-18 16:04:57  user: jack: ... (neutral)
+2023-08-18 16:05:00  assistant: I understand that you may not be able to share the reason why you can't stand up, Jack. If there's anything I can do to assist
+===================================
+Recording Date: 2023-08-18 16:10:55
+
+2023-08-18 16:11:17  user: jack: hello is very nice to meet you here (neutral)
+2023-08-18 16:11:19  assistant: Hello Jack! It's nice to meet you too. How can I assist you today?
+
+2023-08-18 16:11:32  user: jack: the (neutral)
+2023-08-18 16:11:35  assistant: I'm sorry, but I'm not sure what you mean by "the". Could you please provide more context or clarify your question?
+
+2023-08-18 16:11:50  user: jack: kaos is that have a rest that kind of you have a rest (neutral)
+2023-08-18 16:11:52  assistant: I'm sorry, but I'm having difficulty understanding your question. Are you asking if robots like me need to rest, similar to humans?
+
+2023-08-18 16:12:09  user: jack: that is just to rest like see done (neutral)
+2023-08-18 16:12:12  assistant: Ah, I see what you mean now. As a physical robot, I do not have the same kind of biological needs as humans, so I do
+
+2023-08-18 16:12:28  user: jack: case either (neutral)
+2023-08-18 16:12:30  assistant: I'm sorry, but I'm having trouble understanding your question. Could you please rephrase or provide more context?
+
+2023-08-18 16:12:45  user: jack: the can you move back want (neutral)
+2023-08-18 16:12:47  assistant: Certainly, Jack. As a physical robot, I have the ability to move forwards and backwards. Please let me know if you would like me to move
+
+2023-08-18 16:13:04  user: jack: is just to move back (neutral)
+2023-08-18 16:13:06  assistant: Understood, Jack. I will proceed to move backwards. Please make sure there is enough space behind me to avoid any obstacles or collisions. Here I
+
+2023-08-18 16:13:24  user: jack: the thank you secular of us and the rest (neutral)
+2023-08-18 16:13:26  assistant: You're welcome, Jack! If you have any more questions or need further assistance, feel free to ask.
+
+2023-08-18 16:13:41  user: jack: a (neutral)
+2023-08-18 16:13:43  assistant: I'm sorry, but I'm not sure what you mean by "a". Can you please provide more context or clarify your question?
+
+2023-08-18 16:13:58  user: jack: can you profound with the rest for the k you perform rest function (neutral)
+2023-08-18 16:14:01  assistant: As a physical robot, I do not have the same biological needs as humans, so I do not require rest in the same way. However, I
+===================================
+Recording Date: 2023-08-18 16:19:58
+
+2023-08-18 16:20:19  user: jack: hello can you stand up (neutral)
+2023-08-18 16:20:22  assistant: Sure, I can stand up. Give me a moment. (The robot NAO starts the process of standing up)
+===================================
+Recording Date: 2023-08-18 16:24:47
+
+2023-08-18 16:24:52  assistant: Hi, jack, meet you again
+2023-08-18 16:25:07  user: jack: have a rest just sit down (neutral)
+2023-08-18 16:25:10  assistant: Sure, I'll find a place to sit down. Thank you for suggesting it.
+===================================
+Recording Date: 2023-08-18 16:53:58
+
+2023-08-18 16:54:04  assistant: Hi, jack, meet you again
+2023-08-18 16:54:19  user: jack: oh yeah nice to meet you kaos stand up (neutral)
+2023-08-18 16:54:22  assistant: Sure, give me a moment to stand up. (NAO stands up) I'm ready now. How can I help you today, Jack?
+
+2023-08-18 16:54:37  user: jack: his nk please sit down have a rest (neutral)
+2023-08-18 16:54:39  assistant: Of course, let me take a seat and rest for a bit. (NAO sits down) Thank you for your consideration, Jack. Is there
+
+2023-08-18 16:54:55  user: jack: yes okay sex for you walk see you (none)
+2023-08-18 16:54:58  assistant: I'm sorry, but I'm unable to perform the action you requested. As an AI language model, I don't have a physical body or the
+===================================
+Recording Date: 2023-08-18 16:56:04
+
+2023-08-18 16:56:14  assistant: Alright! Nice to meet you, ...
+2023-08-18 16:56:28  user: ...: my name is caps nasa (neutral)
+2023-08-18 16:56:30  assistant: Nice to meet you, Caps Nasa! How can I assist you today?
+===================================
+Recording Date: 2023-08-18 16:56:38
+
+2023-08-18 16:56:49  assistant: Alright! Nice to meet you, Caps
+2023-08-18 16:57:03  user: Caps: the blah blah blah blah blah (neutral)
+2023-08-18 16:57:06  assistant: So, what would you like to talk about, Caps?
+===================================
+Recording Date: 2023-08-18 16:57:11
+
+2023-08-18 16:57:19  assistant: Alright! Nice to meet you, Caps
+2023-08-18 16:57:34  user: Caps: nice to meet you (neutral)
+2023-08-18 16:57:36  assistant: Nice to meet you too, Caps! How can I assist you today?
+===================================
+Recording Date: 2023-08-18 16:57:53
+
+2023-08-18 16:58:02  assistant: Alright! Nice to meet you, Caps
+2023-08-18 16:58:17  user: Caps: the cave system arrest (neutral)
+2023-08-18 16:58:19  assistant: I'm sorry, but I'm not sure what you mean by "Caps: the cave system arrest (neutral)". Could you please provide more context or
