@@ -17,7 +17,7 @@ python -m pip install -r requirements_py37.txt
 To start the application, you can use python3.7 to run the 'call_main.py' file, or directly use python2.7 to run the 'main.py' file in the python27 folder.
 
 Once the GUI is started, please enter the socket port for this application (usually 5000), Nao's ip address and port (by press the chect button of Nao once), and your ChatGPT API key(applied in Openai website https://platform.openai.com/account/api-keys). Tick the Nao avaliable checkbox and press the initial building. Once the program says initialization done, you can press the start conmmunication button.
-
+![alt text](https://github.com/Macreeeee/cognitive_robot_with_machine_learning/tree/main/src/recordings/pictures/gui_sample.jpg?raw=true)
 You can press the clear recording button whenever you find the recording window crowded.
 
 Once the stop button is pressed, the conversation will end until Nao finish speaking its response.
