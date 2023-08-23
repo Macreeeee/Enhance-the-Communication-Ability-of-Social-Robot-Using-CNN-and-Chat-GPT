@@ -4,6 +4,4 @@ echo y | plink -ssh -l nao -pw nao nao.local "scp abc.txt nao@nao.local:/home/na
 echo y | plink -ssh -l nao -pw nao nao.local "cat > nao@nao.local:/home/nao/recordings" < "D:\GitRepos\COMP66090\cognitive_robot_with_machine_learning\src\abc.txt"
 pscp -pw nao abc.txt nao@nao.local:/home/nao/recordings
 
-scp D:\GitRepos\COMP66090\cognitive_robot_with_machine_learning\src\abc.txt nao@nao.local:/home/nao/recordings
-
 scp /path/to/remote/file %USERNAME%@%COMPUTERNAME%:/path/to/local/destination

@@ -3,3 +3,8 @@ openai
 pydub
 deepface
 fer
+cv2
+tensorflow
+wave
+vosk
+pyaudio

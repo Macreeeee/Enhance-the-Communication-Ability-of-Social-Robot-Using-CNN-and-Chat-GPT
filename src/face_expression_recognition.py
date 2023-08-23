@@ -41,38 +41,38 @@ def self_trained_cnn(face_cascade, model, image):
     return predict
 
 
-def self_trained_cnn_group_test():
-    face_cascade = cv2.CascadeClassifier(cv2.data.haarcascades + 'haarcascade_frontalface_default.xml')
-    path = 'fer_model/flicnn_model.keras'
-    model = keras.models.load_model(path, compile=False)
-    model.compile()
-    emotion_list = ['anger', 'disgust', 'happy', 'sad', 'surprise', 'neutral']
-    # emotion_list = ['anger', 'neutral', 'sad', 'disgust', 'happy', 'surprise']
-    emotion_folder_list = ['anger', 'disgust', 'happy', 'sad', 'surprise', 'neutral']
-    map = {'anger': False, 'disgust': False, 'happy': True, 'sad': False, 'surprise': True, 'neutral': True}
-    h = 120
-    w = 160
-    count = 0
-    total = 0
-    for e in emotion_folder_list:
-        for i in range(10):
-            total += 1
-            image = cv2.imread('./recordings/pictures/{}/image{}.jpg'.format(e, str(i)))
-            image = face_region(face_cascade, image)
-            # cv2.imwrite('./recordings/pictures/{}/_image{}.jpg'.format(e, str(i)), image)
-            start = time.time()
-            # image = image[h // 2 - 24:h // 2 + 24, w // 2 - 24:w // 2 + 24]
-            image = cv2.resize(image, (48, 48))
-            image = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
-            prediction = model.predict(np.array([image]))
-            prediction = emotion_list[np.argmax(prediction)]
-            end = time.time()
-            print('time used: {}'.format(end - start))
-            print('true: {}, pre: {}'.format(e, prediction))
-            # if map[prediction] == map[e]:
-            if prediction == e:
-                count += 1
-    print(count / total)
+# def self_trained_cnn_group_test():
+#     face_cascade = cv2.CascadeClassifier(cv2.data.haarcascades + 'haarcascade_frontalface_default.xml')
+#     path = 'fer_model/flicnn_model.keras'
+#     model = keras.models.load_model(path, compile=False)
+#     model.compile()
+#     emotion_list = ['anger', 'disgust', 'happy', 'sad', 'surprise', 'neutral']
+#     # emotion_list = ['anger', 'neutral', 'sad', 'disgust', 'happy', 'surprise']
+#     emotion_folder_list = ['anger', 'disgust', 'happy', 'sad', 'surprise', 'neutral']
+#     map = {'anger': False, 'disgust': False, 'happy': True, 'sad': False, 'surprise': True, 'neutral': True}
+#     h = 120
+#     w = 160
+#     count = 0
+#     total = 0
+#     for e in emotion_folder_list:
+#         for i in range(10):
+#             total += 1
+#             image = cv2.imread('./recordings/pictures/{}/image{}.jpg'.format(e, str(i)))
+#             image = face_region(face_cascade, image)
+#             # cv2.imwrite('./recordings/pictures/{}/_image{}.jpg'.format(e, str(i)), image)
+#             start = time.time()
+#             # image = image[h // 2 - 24:h // 2 + 24, w // 2 - 24:w // 2 + 24]
+#             image = cv2.resize(image, (48, 48))
+#             image = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
+#             prediction = model.predict(np.array([image]))
+#             prediction = emotion_list[np.argmax(prediction)]
+#             end = time.time()
+#             print('time used: {}'.format(end - start))
+#             print('true: {}, pre: {}'.format(e, prediction))
+#             # if map[prediction] == map[e]:
+#             if prediction == e:
+#                 count += 1
+#     print(count / total)
 
 
 def deep_face(img):
@@ -97,31 +97,31 @@ def deep_face(img):
     # plt.show()
 
 
-def deep_face_group_test():
-    face_cascade = cv2.CascadeClassifier(cv2.data.haarcascades + 'haarcascade_frontalface_default.xml')
-    # emotion_list = ['happy']
-    emotion_folder_list = ['anger', 'disgust', 'happy', 'sad', 'surprise', 'neutral']
-    emotion_list = ['angry', 'disgust', 'happy', 'sad', 'surprise', 'neutral']
-    map = {'angry': False, 'anger': False, 'disgust': False, 'happy': True, 'sad': False, 'surprise': True,
-           'neutral': True, 'fear': -1}
-    count = 0
-    total = 0
-    for e in range(len(emotion_folder_list)):
-        for i in range(30):
-            total += 1
-            img = cv2.imread('./recordings/pictures/{}/image{}.jpg'.format(emotion_folder_list[e], str(i)))
-            img = face_region(face_cascade, img)
-            try:
-                result = DeepFace.analyze(img, actions=['emotion'], enforce_detection=False)
-                prediction = result[0]['dominant_emotion']
-            except:
-                prediction = 'None'
-                total -= 1
-            print('true: {}, pre: {}'.format(emotion_folder_list[e], prediction))
-            if map[prediction] == map[emotion_folder_list[e]]:
-                # if prediction == emotion_list[e]:
-                count += 1
-    print(count / total)
+# def deep_face_group_test():
+#     face_cascade = cv2.CascadeClassifier(cv2.data.haarcascades + 'haarcascade_frontalface_default.xml')
+#     # emotion_list = ['happy']
+#     emotion_folder_list = ['anger', 'disgust', 'happy', 'sad', 'surprise', 'neutral']
+#     emotion_list = ['angry', 'disgust', 'happy', 'sad', 'surprise', 'neutral']
+#     map = {'angry': False, 'anger': False, 'disgust': False, 'happy': True, 'sad': False, 'surprise': True,
+#            'neutral': True, 'fear': -1}
+#     count = 0
+#     total = 0
+#     for e in range(len(emotion_folder_list)):
+#         for i in range(30):
+#             total += 1
+#             img = cv2.imread('./recordings/pictures/{}/image{}.jpg'.format(emotion_folder_list[e], str(i)))
+#             img = face_region(face_cascade, img)
+#             try:
+#                 result = DeepFace.analyze(img, actions=['emotion'], enforce_detection=False)
+#                 prediction = result[0]['dominant_emotion']
+#             except:
+#                 prediction = 'None'
+#                 total -= 1
+#             print('true: {}, pre: {}'.format(emotion_folder_list[e], prediction))
+#             if map[prediction] == map[emotion_folder_list[e]]:
+#                 # if prediction == emotion_list[e]:
+#                 count += 1
+#     print(count / total)
 
 
 def run_fer(detector, img):
@@ -134,36 +134,36 @@ def run_fer(detector, img):
     return prediction
 
 
-def fer_group_test():
-    # face_cascade = cv2.CascadeClassifier(cv2.data.haarcascades + 'haarcascade_frontalface_default.xml')
-    # emotion_list = ['anger']
-    emotion_folder_list = ['anger', 'disgust', 'happy', 'sad', 'surprise', 'neutral']
-    emotion_list = ['angry', 'disgust', 'happy', 'sad', 'surprise', 'neutral']
-    map = {'angry': False, 'anger': False, 'disgust': False, 'happy': True, 'sad': False, 'surprise': True,
-           'neutral': True, 'fear': -1, 'none': -1}
-    count = 0
-    total = 0
-    detector = FER()
-
-    for e in range(len(emotion_folder_list)):
-        for i in range(30):
-            total += 1
-            img = cv2.imread('./recordings/pictures/{}/image{}.jpg'.format(emotion_folder_list[e], str(i)))
-            # img = face_region(face_cascade, img)
-
-            result = detector.detect_emotions(img)
-            try:
-                d = result[0]['emotions']
-                prediction = max(d, key=d.get)
-            except:
-                prediction = 'none'
-                total -= 1
-
-            print('true: {}, pre: {}'.format(emotion_folder_list[e], prediction))
-            if map[prediction] == map[emotion_folder_list[e]]:
-                # if prediction == emotion_list[e]:
-                count += 1
-    print(count / total)
+# def fer_group_test():
+#     # face_cascade = cv2.CascadeClassifier(cv2.data.haarcascades + 'haarcascade_frontalface_default.xml')
+#     # emotion_list = ['anger']
+#     emotion_folder_list = ['anger', 'disgust', 'happy', 'sad', 'surprise', 'neutral']
+#     emotion_list = ['angry', 'disgust', 'happy', 'sad', 'surprise', 'neutral']
+#     map = {'angry': False, 'anger': False, 'disgust': False, 'happy': True, 'sad': False, 'surprise': True,
+#            'neutral': True, 'fear': -1, 'none': -1}
+#     count = 0
+#     total = 0
+#     detector = FER()
+#
+#     for e in range(len(emotion_folder_list)):
+#         for i in range(30):
+#             total += 1
+#             img = cv2.imread('./recordings/pictures/{}/image{}.jpg'.format(emotion_folder_list[e], str(i)))
+#             # img = face_region(face_cascade, img)
+#
+#             result = detector.detect_emotions(img)
+#             try:
+#                 d = result[0]['emotions']
+#                 prediction = max(d, key=d.get)
+#             except:
+#                 prediction = 'none'
+#                 total -= 1
+#
+#             print('true: {}, pre: {}'.format(emotion_folder_list[e], prediction))
+#             if map[prediction] == map[emotion_folder_list[e]]:
+#                 # if prediction == emotion_list[e]:
+#                 count += 1
+#     print(count / total)
 
 
 def face_recognition(img1_path, img2_path):
@@ -234,6 +234,7 @@ def main(port, model_name):
 
 
 if __name__ == "__main__":
+    main(int(sys.argv[1]), sys.argv[2])
     # start = time.time()
     # deep_face()
     # deep_face_group_test()
@@ -243,7 +244,6 @@ if __name__ == "__main__":
     # end = time.time()
     # print('Total Time used: {}'.format(end - start))
     # exit()
-    main(int(sys.argv[1]), sys.argv[2])
 
     # deep_face('./recordings/face_data/jack.jpg')
 

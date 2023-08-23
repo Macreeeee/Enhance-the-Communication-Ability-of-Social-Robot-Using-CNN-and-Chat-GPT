@@ -37,7 +37,7 @@ def call_gpt(api_key):
 def call_gpt_for_instruction(api_key):
     command_instruction = "python generate_chatgpt_instruction.py {}".format(api_key)
     output = subprocess.check_output(command_instruction, shell=True)
-    print('GPT INSTRUCTION: '+ output)
+    print('GPT INSTRUCTION: ' + output)
     return output
 
 
@@ -91,7 +91,9 @@ def wait_until_receive(conn):
 # Initially create or re-write communication recording.json with basic chat-GPT content.
 # Initially create or re-write communication recording.txt with time.
 def initial_communication_background():
-    content = "Your name is NAO, you are a physical robot, instead of a virtual AI. You have phisical ability to stand up, sit down and walk and do many other motions. You task is communication with me. You should respond me directly without 'NAO:'."
+    content = "Your name is NAO, you are a physical robot, instead of a virtual AI. You have physical ability to " \
+              "stand up, sit down and walk and do many other motions. You task is to communication with me. You should " \
+              "respond me directly without using pre-fix 'NAO:'. "
     communication = [{"role": "system", "content": content}]
 
     json_dict = dict()

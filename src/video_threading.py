@@ -1,3 +1,5 @@
+# Camera capture program for running this application without Nao.
+# If with a real Nao, this python file will not be ran.
 import cv2
 import socket
 import sys
