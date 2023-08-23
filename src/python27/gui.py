@@ -68,7 +68,6 @@ class Application(Frame):
 
         self.openaikey_input_label = Label(self, text="OpenAI API key:")
         self.openaikey_input = Entry(self)
-        self.openaikey_input.insert(0, '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')
 
         self.log_window = Text(self, width=90, height=10)
         self.recording_window = Text(self, width=70, height=15)
